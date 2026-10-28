@@ -2,59 +2,26 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>우리 진짜 맞아? 💗</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; padding: 22px 14px; min-height: 100vh;
-      display: flex; justify-content: center; align-items: center;
-      font-family: Arial, "Malgun Gothic", sans-serif; color: #513d5b;
-      background: linear-gradient(135deg, #fff0f6, #eee7ff);
-    }
-    .card {
-      width: 100%; max-width: 480px; padding: 27px 22px;
-      background: white; border-radius: 26px;
-      box-shadow: 0 12px 40px #bba4ce35; text-align: center;
-    }
-    h1 { margin: 8px 0; font-size: 29px; }
-    h2 { font-size: 21px; line-height: 1.5; }
-    p { line-height: 1.6; }
-    .sub { color: #917f9c; font-size: 14px; }
-    .heart { font-size: 44px; }
-    input, textarea {
-      width: 100%; padding: 14px; margin: 8px 0;
-      border: 1px solid #e7d9ef; border-radius: 13px;
-      font: inherit; outline-color: #d88bc5;
-    }
-    textarea { min-height: 90px; resize: vertical; }
-    button {
-      width: 100%; padding: 14px; margin-top: 9px;
-      border: 0; border-radius: 13px; cursor: pointer;
-      background: #f0e6fa; color: #674565;
-      font-size: 15px; font-weight: bold;
-    }
-    button.primary { background: #d88bc5; color: white; }
-    button:disabled { opacity: .55; cursor: wait; }
-    .panel {
-      padding: 17px; margin-top: 15px;
-      border-radius: 17px; background: #fff7fc; text-align: left;
-    }
-    .hidden { display: none !important; }
-    .code {
-      font-size: 27px; letter-spacing: 4px; font-weight: bold;
-      text-align: center; color: #b34e9e; overflow-wrap: anywhere;
-    }
-    .status { font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
-    .answer {
-      background: white; padding: 13px; margin-top: 10px;
-      border-radius: 12px; border: 1px solid #f0e1ef;
-      overflow-wrap: anywhere;
-    }
-    .small { color: #a092aa; font-size: 12px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리 진짜 맞아? 💗</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px 14px;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial,"Malgun Gothic",sans-serif;color:#513d5b;background:linear-gradient(135deg,#fff0f6,#eee7ff)}
+.card{width:100%;max-width:480px;padding:26px 22px;background:#fff;border-radius:26px;box-shadow:0 12px 40px #bba4ce35;text-align:center}
+h1{margin:8px 0;font-size:29px}h2{font-size:21px;line-height:1.5}
+p{line-height:1.6}.sub{color:#917f9c;font-size:14px}.heart{font-size:44px}
+input,textarea{width:100%;padding:14px;margin:8px 0;border:1px solid #e7d9ef;border-radius:13px;font:inherit;outline-color:#d88bc5}
+textarea{min-height:90px;resize:vertical}
+button{width:100%;padding:14px;margin-top:9px;border:0;border-radius:13px;cursor:pointer;background:#f0e6fa;color:#674565;font-size:15px;font-weight:bold}
+button.primary{background:#d88bc5;color:white}button:disabled{opacity:.55;cursor:wait}
+.panel{padding:17px;margin-top:15px;border-radius:17px;background:#fff7fc;text-align:left}
+.hidden{display:none!important}.code{font-size:27px;letter-spacing:4px;font-weight:bold;text-align:center;color:#b34e9e;overflow-wrap:anywhere}
+.status{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.answer{background:white;padding:13px;margin-top:10px;border-radius:12px;border:1px solid #f0e1ef;overflow-wrap:anywhere}
+.small{color:#a092aa;font-size:12px}
+</style>
 </head>
 <body>
 <main class="card">
@@ -90,7 +57,7 @@
 
     <div id="lobby" class="panel">
       <h3>💞 둘만의 게임</h3>
-      <p class="sub">한 명이 게임을 시작하면 다른 사람도 같은 질문을 볼 수 있어.</p>
+      <p class="sub">한 사람이 시작하면 두 사람에게 같은 질문이 표시돼.</p>
       <button id="gameBtn" class="primary">게임 시작 / 질문 확인</button>
     </div>
 
@@ -98,15 +65,14 @@
       <p class="sub">💌 이번 질문</p>
       <h2 id="questionText"></h2>
       <p id="answerHint" class="sub"></p>
-      <textarea id="answerInput" maxlength="500"
-        placeholder="너의 답변을 입력해 줘"></textarea>
+      <textarea id="answerInput" maxlength="500" placeholder="너의 답변을 입력해 줘"></textarea>
       <button id="submitBtn" class="primary">답변 제출하기</button>
     </div>
 
     <div id="waitingPanel" class="panel hidden">
-      <h3>💌 답변을 받았어!</h3>
-      <p>네 답변은 제출됐어. 상대방이 답변할 때까지 기다려 줘.</p>
-      <p class="sub">상대방의 답변은 아직 공개되지 않아 🔒</p>
+      <h3>💌 답변 제출 완료!</h3>
+      <p>상대방이 답변할 때까지 기다려 줘.</p>
+      <p class="sub">두 사람 모두 제출하기 전까지 답변은 비공개야 🔒</p>
       <button id="refreshBtn">상태 확인하기</button>
     </div>
 
@@ -123,340 +89,207 @@
 </main>
 
 <script>
-const SUPABASE_URL = "https://dcdattftbhwbpxzndeks.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_hp22uPBJ62LJjSBQe9q3rg_Km4d8zd9";
+const SUPABASE_URL="https://dcdattftbhwbpxzndeks.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_hp22uPBJ62LJjSBQe9q3rg_Km4d8zd9";
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const $=id=>document.getElementById(id);
 
-const client = window.supabase.createClient(
-  SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
-);
-const $ = id => document.getElementById(id);
+let nickname=localStorage.getItem("couple_game_nickname")||"";
+let coupleId=localStorage.getItem("couple_game_room_id")||"";
+let roomCode=localStorage.getItem("couple_game_room_code")||"";
+let sessionId=null;
+let pollTimer=null;
+let busy=false;
 
-let nickname = localStorage.getItem("couple_game_nickname") || "";
-let coupleId = localStorage.getItem("couple_game_room_id") || "";
-let roomCode = localStorage.getItem("couple_game_room_code") || "";
-let sessionId = null;
-let pollTimer = null;
-let submitting = false;
-
-function say(message, error = false) {
-  $("status").textContent = message;
-  $("status").style.color = error ? "#c03965" : "#765180";
+function say(message,error=false){
+  $("status").textContent=message;
+  $("status").style.color=error?"#c03965":"#765180";
 }
+function show(id){$(id).classList.remove("hidden")}
+function hide(id){$(id).classList.add("hidden")}
 
-function show(id) { $(id).classList.remove("hidden"); }
-function hide(id) { $(id).classList.add("hidden"); }
-
-function showNickname() {
-  hide("roomScreen");
-  hide("gameScreen");
-  show("nicknameScreen");
-  $("nickname").value = nickname;
+function showNickname(){
+  hide("roomScreen");hide("gameScreen");show("nicknameScreen");
+  $("nickname").value=nickname;
 }
-
-function showRoom() {
-  hide("nicknameScreen");
-  hide("gameScreen");
-  show("roomScreen");
-  $("welcome").textContent = nickname + " 님, 환영해! 💕";
+function showRoom(){
+  hide("nicknameScreen");hide("gameScreen");show("roomScreen");
+  $("welcome").textContent=nickname+" 님, 환영해! 💕";
 }
-
-function showGame() {
-  hide("nicknameScreen");
-  hide("roomScreen");
-  show("gameScreen");
-  $("roomLabel").textContent = nickname + " 님의 커플 방";
-  $("inviteCode").textContent = roomCode || "방 연결 완료";
-  say("커플 방에 연결됐어! 게임을 시작해 보자.");
+function showGame(){
+  hide("nicknameScreen");hide("roomScreen");show("gameScreen");
+  $("roomLabel").textContent=nickname+" 님의 커플 방";
+  $("inviteCode").textContent=roomCode||"방 연결 완료";
 }
-
-function showLobby() {
-  hide("questionPanel");
-  hide("waitingPanel");
-  hide("resultPanel");
-  show("lobby");
-  $("gameBtn").disabled = false;
-  $("gameBtn").textContent = "게임 시작 / 질문 확인";
+function saveRoom(){
+  localStorage.setItem("couple_game_room_id",coupleId);
+  localStorage.setItem("couple_game_room_code",roomCode);
 }
-
-function showQuestion(state) {
-  hide("lobby");
-  hide("waitingPanel");
-  hide("resultPanel");
-  show("questionPanel");
-  $("questionText").textContent = state.question;
-  $("answerInput").value = state.my_answer || "";
-
-  if (state.my_answer) {
-    $("answerInput").disabled = true;
-    $("submitBtn").disabled = true;
-    hide("questionPanel");
-    show("waitingPanel");
-    say("답변 제출 완료! 상대방의 답변을 기다리고 있어.");
-  } else {
-    $("answerInput").disabled = false;
-    $("submitBtn").disabled = false;
-    $("answerHint").textContent =
-      "두 사람 모두 제출하기 전까지 답변은 비공개야.";
-    say("질문에 답하고 제출해 줘!");
+function showLobby(){
+  hide("questionPanel");hide("waitingPanel");hide("resultPanel");
+  show("lobby");$("gameBtn").disabled=false;
+  $("gameBtn").textContent="게임 시작 / 질문 확인";
+}
+function showQuestion(state){
+  hide("lobby");hide("waitingPanel");hide("resultPanel");show("questionPanel");
+  $("questionText").textContent=state.question;
+  $("answerInput").value=state.my_answer||"";
+  if(state.my_answer){
+    hide("questionPanel");show("waitingPanel");
+  }else{
+    $("answerInput").disabled=false;
+    $("submitBtn").disabled=false;
+    $("answerHint").textContent="두 사람 모두 제출하기 전까지 답변은 비공개야.";
   }
 }
-
-function showResult(state) {
-  hide("lobby");
-  hide("questionPanel");
-  hide("waitingPanel");
-  show("resultPanel");
-
-  const answers = state.answers || [];
+function showResult(state){
+  hide("lobby");hide("questionPanel");hide("waitingPanel");show("resultPanel");
+  const answers=state.answers||[];
   $("answersList").replaceChildren();
-
-  answers.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "answer";
-    const name = document.createElement("strong");
-    name.textContent = item.nickname || "익명";
-    const answer = document.createElement("p");
-    answer.textContent = item.answer;
-    div.append(name, answer);
-    $("answersList").appendChild(div);
+  answers.forEach(item=>{
+    const div=document.createElement("div");div.className="answer";
+    const name=document.createElement("strong");
+    name.textContent=item.nickname||"익명";
+    const answer=document.createElement("p");answer.textContent=item.answer;
+    div.append(name,answer);$("answersList").appendChild(div);
   });
-
-  const normalized = answers.map(a =>
-    String(a.answer || "").trim().toLocaleLowerCase()
-  );
-  const matched = normalized.length === 2 &&
-    normalized[0] === normalized[1];
-
-  $("resultTitle").textContent = matched
-    ? "💖 찰떡궁합!"
-    : "😂 우리 대화 좀 하자!";
-  $("resultMessage").textContent = matched
-    ? "두 사람의 답변이 같아! 마음이 잘 통하는걸?"
-    : "답변이 다르네! 서로의 생각을 확인해 보자.";
-  say("두 사람의 답변이 모두 공개됐어!");
+  const normalized=answers.map(a=>String(a.answer||"").trim().toLocaleLowerCase());
+  const matched=normalized.length===2&&normalized[0]===normalized[1];
+  $("resultTitle").textContent=matched?"💖 찰떡궁합!":"😂 우리 대화 좀 하자!";
+  $("resultMessage").textContent=matched
+    ?"두 사람의 답변이 같아! 마음이 잘 통하는걸?"
+    :"답변이 다르네! 서로의 생각을 확인해 보자.";
 }
 
-async function startWithNickname() {
-  nickname = $("nickname").value.trim();
-
-  if (!nickname) {
-    say("닉네임을 입력해 줘!", true);
-    return;
-  }
-
-  $("startBtn").disabled = true;
-  say("익명 로그인을 확인하고 있어...");
-
-  try {
-    const { data, error } = await client.auth.getSession();
-    if (error) throw error;
-
-    if (!data.session) {
-      const result = await client.auth.signInAnonymously();
-      if (result.error) throw result.error;
+async function startWithNickname(){
+  const entered=$("nickname").value.trim();
+  if(!entered){say("닉네임을 입력해 줘!",true);return}
+  nickname=entered;$("startBtn").disabled=true;say("로그인을 준비하고 있어...");
+  try{
+    const {data,error}=await client.auth.getSession();
+    if(error)throw error;
+    if(!data.session){
+      const result=await client.auth.signInAnonymously();
+      if(result.error)throw result.error;
     }
-
-    const { error: profileError } = await client.auth.updateUser({
-      data: { nickname }
-    });
-    if (profileError) throw profileError;
-
-    localStorage.setItem("couple_game_nickname", nickname);
-
-    if (coupleId) {
-      showGame();
-      await loadGameState(false);
-    } else {
-      showRoom();
-      say("시작 완료! 방을 만들거나 초대 코드로 참여해 줘.");
-    }
-  } catch (error) {
-    say("시작 실패: " + error.message, true);
-  } finally {
-    $("startBtn").disabled = false;
-  }
+    const {error:profileError}=await client.auth.updateUser({data:{nickname}});
+    if(profileError)throw profileError;
+    localStorage.setItem("couple_game_nickname",nickname);
+    if(coupleId){showGame();await loadGameState(false);startPolling()}
+    else{showRoom();say("시작 완료! 방을 만들거나 초대 코드로 참여해 줘.")}
+  }catch(e){say("시작 실패: "+e.message,true)}
+  finally{$("startBtn").disabled=false}
 }
 
-async function createRoom() {
-  $("createBtn").disabled = true;
-  say("방을 만들고 있어...");
-
-  try {
-    const { data, error } = await client.rpc("create_couple_room");
-    if (error) throw error;
-
-    coupleId = String(data.couple_id);
-    roomCode = data.invite_code;
-    saveRoom();
-    showGame();
-    say("방 생성 성공! 초대 코드를 상대방에게 보내 줘.");
-  } catch (error) {
-    say("방 만들기 실패: " + error.message, true);
-  } finally {
-    $("createBtn").disabled = false;
-  }
+async function createRoom(){
+  $("createBtn").disabled=true;say("방을 만들고 있어...");
+  try{
+    const {data,error}=await client.rpc("create_couple_room");
+    if(error)throw error;
+    coupleId=String(data.couple_id);roomCode=data.invite_code;
+    saveRoom();showGame();showLobby();startPolling();
+    say("방 생성 성공! 상대방에게 초대 코드를 보내 줘.");
+  }catch(e){say("방 만들기 실패: "+e.message,true)}
+  finally{$("createBtn").disabled=false}
 }
 
-async function joinRoom() {
-  const code = $("inviteInput").value.trim().toUpperCase();
-
-  if (code.length !== 8) {
-    say("초대 코드 8자리를 입력해 줘.", true);
-    return;
-  }
-
-  $("joinBtn").disabled = true;
-  say("방에 연결하고 있어...");
-
-  try {
-    const { data, error } = await client.rpc("join_couple_room", {
-      p_code: code
-    });
-    if (error) throw error;
-
-    coupleId = String(data.couple_id);
-    roomCode = data.invite_code || code;
-    saveRoom();
-    showGame();
-    say("방 참여 성공! 이제 게임을 시작할 수 있어.");
-  } catch (error) {
-    say("방 참여 실패: " + error.message, true);
-  } finally {
-    $("joinBtn").disabled = false;
-  }
-}
-
-function saveRoom() {
-  localStorage.setItem("couple_game_room_id", coupleId);
-  localStorage.setItem("couple_game_room_code", roomCode);
-}
-
-async function loadGameState(startIfNeeded = false) {
-  if (!coupleId) {
-    say("먼저 커플 방을 만들거나 참여해 줘.", true);
-    return;
-  }
-
-  try {
-    const { data, error } = await client.rpc("get_couple_game_state", {
-      p_couple_id: Number(coupleId)
-    });
-    if (error) throw error;
-
-    if (data.has_game && data.status === "revealed") {
-      sessionId = data.session_id;
-      showResult(data);
-      return;
-    }
-
-    if (data.has_game && data.status === "playing") {
-      sessionId = data.session_id;
-      showQuestion(data);
-      return;
-    }
-
-    if (startIfNeeded) {
-      const { data: created, error: createError } = await client.rpc(
-        "start_couple_game",
-        { p_couple_id: Number(coupleId) }
-      );
-      if (createError) throw createError;
-      sessionId = created.session_id;
-      await loadGameState(false);
-      return;
-    }
-
-    showLobby();
-    say("아직 진행 중인 질문이 없어. 게임 시작 버튼을 눌러 줘.");
-  } catch (error) {
-    say("게임 상태 확인 실패: " + error.message, true);
-  }
-}
-
-async function submitAnswer() {
-  const answer = $("answerInput").value.trim();
-
-  if (!sessionId) {
-    say("게임 질문을 먼저 불러와 줘.", true);
-    return;
-  }
-  if (!answer) {
-    say("답변을 입력해 줘!", true);
-    return;
-  }
-  if (submitting) return;
-
-  submitting = true;
-  $("submitBtn").disabled = true;
-  say("답변을 제출하고 있어...");
-
-  try {
-    const { error } = await client.rpc("submit_couple_answer", {
-      p_session_id: Number(sessionId),
-      p_answer_text: answer
-    });
-    if (error) throw error;
-
-    say("답변 제출 완료! 상대방의 답변을 기다리고 있어.");
+async function joinRoom(){
+  const code=$("inviteInput").value.trim().toUpperCase();
+  if(code.length!==8){say("초대 코드 8자리를 입력해 줘.",true);return}
+  $("joinBtn").disabled=true;say("방에 연결하고 있어...");
+  try{
+    const {data,error}=await client.rpc("join_couple_room",{p_code:code});
+    if(error)throw error;
+    coupleId=String(data.couple_id);roomCode=data.invite_code||code;
+    saveRoom();showGame();startPolling();
     await loadGameState(false);
-  } catch (error) {
-    say("답변 제출 실패: " + error.message, true);
-    $("submitBtn").disabled = false;
-  } finally {
-    submitting = false;
-  }
+    say("커플 방 참여 성공! 💗");
+  }catch(e){say("방 참여 실패: "+e.message,true)}
+  finally{$("joinBtn").disabled=false}
 }
 
-function startPolling() {
-  if (pollTimer) clearInterval(pollTimer);
-  pollTimer = setInterval(() => {
-    if (coupleId && !submitting) loadGameState(false);
-  }, 3000);
-}
+async function loadGameState(startNext=false){
+  if(!coupleId)return;
+  try{
+    let {data,error}=await client.rpc("get_couple_game_state",{p_couple_id:Number(coupleId)});
+    if(error)throw error;
 
-$("startBtn").addEventListener("click", startWithNickname);
-$("nickname").addEventListener("keydown", e => {
-  if (e.key === "Enter") startWithNickname();
-});
-$("createBtn").addEventListener("click", createRoom);
-$("joinBtn").addEventListener("click", joinRoom);
-$("gameBtn").addEventListener("click", () => loadGameState(true));
-$("submitBtn").addEventListener("click", submitAnswer);
-$("refreshBtn").addEventListener("click", () => loadGameState(false));
-$("nextBtn").addEventListener("click", () => loadGameState(true));
+    // 새 질문 버튼은 결과가 공개된 뒤에만 새 게임을 만든다.
+    if(startNext&&(!data.has_game||data.status==="revealed")){
+      $("nextBtn").disabled=true;
+      $("nextBtn").textContent="새 질문 준비 중...";
+      const {data:created,error:startError}=await client.rpc(
+        "start_couple_game",{p_couple_id:Number(coupleId)}
+      );
+      if(startError)throw startError;
+      sessionId=created.session_id;
 
-$("copyBtn").addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(roomCode);
-    say("초대 코드를 복사했어!");
-  } catch {
-    say("초대 코드: " + roomCode);
-  }
-});
-
-async function init() {
-  try {
-    const { data, error } = await client.auth.getSession();
-    if (error) throw error;
-
-    if (data.session && nickname) {
-      if (coupleId) {
-        showGame();
-        await loadGameState(false);
-        startPolling();
-      } else {
-        showRoom();
-      }
-    } else {
-      showNickname();
+      const result=await client.rpc("get_couple_game_state",{p_couple_id:Number(coupleId)});
+      if(result.error)throw result.error;
+      data=result.data;
     }
-  } catch (error) {
-    showNickname();
-    say("초기화 실패: " + error.message, true);
+
+    if(data.has_game&&data.status==="revealed"){
+      sessionId=data.session_id;showResult(data);
+    }else if(data.has_game&&data.status==="playing"){
+      sessionId=data.session_id;showQuestion(data);
+    }else{
+      sessionId=null;showLobby();
+      say("게임 시작 버튼을 눌러 질문을 불러와 줘.");
+    }
+  }catch(e){say("게임 상태 확인 실패: "+e.message,true)}
+  finally{
+    $("nextBtn").disabled=false;
+    $("nextBtn").textContent="다음 질문 도전하기 💗";
   }
 }
 
+async function submitAnswer(){
+  const answer=$("answerInput").value.trim();
+  if(!sessionId){say("질문을 먼저 불러와 줘.",true);return}
+  if(!answer){say("답변을 입력해 줘!",true);return}
+  if(busy)return;
+  busy=true;$("submitBtn").disabled=true;say("답변을 제출하고 있어...");
+  try{
+    const {error}=await client.rpc("submit_couple_answer",{
+      p_session_id:Number(sessionId),p_answer_text:answer
+    });
+    if(error)throw error;
+    await loadGameState(false);
+    say("답변 제출 완료! 상대방의 답변을 기다리고 있어.");
+  }catch(e){say("답변 제출 실패: "+e.message,true);$("submitBtn").disabled=false}
+  finally{busy=false}
+}
+
+function startPolling(){
+  if(pollTimer)clearInterval(pollTimer);
+  pollTimer=setInterval(()=>{if(coupleId&&!busy)loadGameState(false)},3000);
+}
+
+$("startBtn").addEventListener("click",startWithNickname);
+$("nickname").addEventListener("keydown",e=>{if(e.key==="Enter")startWithNickname()});
+$("createBtn").addEventListener("click",createRoom);
+$("joinBtn").addEventListener("click",joinRoom);
+$("gameBtn").addEventListener("click",()=>loadGameState(true));
+$("submitBtn").addEventListener("click",submitAnswer);
+$("refreshBtn").addEventListener("click",()=>loadGameState(false));
+$("nextBtn").addEventListener("click",()=>loadGameState(true));
+$("copyBtn").addEventListener("click",async()=>{
+  try{await navigator.clipboard.writeText(roomCode);say("초대 코드를 복사했어!")}
+  catch{say("초대 코드: "+roomCode)}
+});
+
+async function init(){
+  try{
+    const {data,error}=await client.auth.getSession();
+    if(error)throw error;
+    if(data.session&&nickname){
+      if(coupleId){
+        showGame();startPolling();await loadGameState(false);
+      }else showRoom();
+    }else showNickname();
+  }catch(e){showNickname();say("초기화 실패: "+e.message,true)}
+}
 init();
 </script>
 </body>
