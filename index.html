@@ -3,243 +3,267 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>우리 진짜 맞아? 💘</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>우리 진짜 맞아? 💗</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(145deg,#fff0f7,#f1e8ff);
-      font-family: Arial,sans-serif;
-      color: #48263b;
+      margin: 0; min-height: 100vh; padding: 24px 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      color: #493b56;
+      background: linear-gradient(135deg, #fff0f6, #eee7ff);
     }
-    main { width: min(100% - 28px,520px); margin: auto; padding: 30px 0; }
-    header { text-align: center; }
-    .brand { color: #c04480; letter-spacing: 3px; font-size: 12px; }
-    h1 { font-size: 35px; margin: 14px 0; }
-    .sub { color: #88677d; line-height: 1.7; }
     .card {
-      background: white; padding: 23px; border-radius: 22px;
-      margin: 18px 0; box-shadow: 0 10px 35px #a83e7510;
+      width: 100%; max-width: 440px; padding: 30px 24px;
+      border-radius: 28px; background: rgba(255,255,255,.94);
+      box-shadow: 0 12px 40px #bba4ce35; text-align: center;
     }
-    h2 { margin-top: 0; font-size: 20px; }
+    .heart { font-size: 48px; }
+    h1 { margin: 8px 0; font-size: 29px; }
+    .sub { color: #897a94; line-height: 1.6; font-size: 14px; }
     input {
-      display: block; width: 100%; padding: 13px;
-      margin: 10px 0; border: 1px solid #e8d5e1;
-      border-radius: 11px; font-size: 15px;
+      width: 100%; padding: 15px; margin: 8px 0;
+      border: 1px solid #e7d9ef; border-radius: 14px;
+      font-size: 16px; outline-color: #d38ac0;
     }
     button {
-      width: 100%; border: 0; padding: 14px;
-      border-radius: 12px; font-size: 15px; font-weight: bold;
-      cursor: pointer; margin-top: 8px;
-      background: #e94d91; color: white;
+      width: 100%; padding: 15px; margin-top: 10px;
+      border: 0; border-radius: 14px; cursor: pointer;
+      font-size: 15px; font-weight: bold;
+      background: #f2d9ee; color: #674565;
     }
-    button.secondary { background: #f9e5f0; color: #9d285f; }
+    button.primary { background: #d88bc5; color: white; }
+    button.secondary { background: #eee7ff; }
     button:disabled { opacity: .55; cursor: wait; }
+    .section {
+      margin-top: 18px; padding: 16px;
+      background: #fff8fc; border-radius: 18px;
+      text-align: left;
+    }
+    .section h3 { margin: 0 0 8px; }
+    .section p { font-size: 13px; color: #897a94; line-height: 1.5; }
     .hidden { display: none !important; }
-    .muted { color: #92778a; font-size: 13px; line-height: 1.6; }
-    #status { white-space: pre-wrap; line-height: 1.6; color: #a32e68; }
-    .code {
-      font-size: 29px; letter-spacing: 5px; font-weight: bold;
-      text-align: center; padding: 16px; background: #fff1f7;
-      border-radius: 13px; overflow-wrap: anywhere;
+    #status {
+      margin-top: 18px; font-size: 14px;
+      line-height: 1.6; overflow-wrap: anywhere;
     }
-    .category {
-      text-align: left; background: white; color: #48263b;
-      border: 1px solid #f1dce8; margin: 6px 0;
+    .invite {
+      font-size: 28px; font-weight: bold; letter-spacing: 4px;
+      text-align: center; color: #b34e9e; margin: 14px 0;
     }
-    footer { text-align: center; font-size: 12px; color: #a48b9d; padding: 20px; }
+    .small { font-size: 12px; color: #998aa1; margin-top: 18px; }
   </style>
 </head>
 <body>
-<main>
-  <header>
-    <div class="brand">LOVE TEST · COUPLE GAME</div>
-    <h1>우리 진짜 맞아? 💘</h1>
-    <p class="sub">우리의 기억은 같을까, 다를까?<br>같으면 운명, 다르면 해명 타임! 😂</p>
-  </header>
+  <main class="card">
+    <div class="heart">💗</div>
+    <h1>우리 진짜 맞아?</h1>
+    <p class="sub">우리의 사랑과 기억을 시험해 보자!<br>이메일 가입 없이 가볍게 시작해 봐.</p>
 
-  <section id="auth" class="card">
-    <h2>💌 우리 게임 시작하기</h2>
-    <p class="muted">이메일 계정을 만들고 로그인해 줘.</p>
-    <input id="email" type="email" autocomplete="email"
-           placeholder="이메일 주소" required>
-    <input id="password" type="password"
-           autocomplete="current-password"
-           placeholder="비밀번호 (8자 이상)" minlength="8" required>
-    <button id="signup">이메일로 회원가입</button>
-    <button id="login" class="secondary">로그인</button>
-    <p class="muted">회원가입 후 이메일 인증이 필요할 수 있어.</p>
-  </section>
+    <section id="nicknameScreen">
+      <input id="nickname" maxlength="20"
+        placeholder="너의 닉네임 (예: 태관)" autocomplete="nickname">
+      <button id="startBtn" class="primary">닉네임으로 시작하기 💕</button>
+      <p class="small">닉네임은 다른 사람과 겹칠 수 있어.</p>
+    </section>
 
-  <section id="app" class="hidden">
-    <section class="card">
-      <h2>💗 커플 연결</h2>
-      <p id="account" class="muted"></p>
-      <button id="createRoom">새 커플 방 만들기</button>
-      <input id="invite" maxlength="8" placeholder="상대방의 초대 코드 8자리">
-      <button id="joinRoom" class="secondary">초대 코드로 입장</button>
-      <div id="room" class="hidden">
-        <p class="muted">우리 커플 초대 코드</p>
-        <div id="code" class="code"></div>
-        <button id="copyCode" class="secondary">초대 코드 복사</button>
+    <section id="gameScreen" class="hidden">
+      <p id="welcome" class="sub"></p>
+
+      <div class="section">
+        <h3>💌 새 커플 방 만들기</h3>
+        <p>방을 만들면 상대방에게 알려 줄 초대 코드가 생겨.</p>
+        <button id="createBtn" class="primary">새 커플 방 만들기</button>
       </div>
-      <button id="logout" class="secondary">로그아웃</button>
+
+      <div class="section">
+        <h3>🔑 초대 코드로 참여하기</h3>
+        <p>상대방이 만든 방의 코드를 입력해 줘.</p>
+        <input id="inviteInput" maxlength="8"
+          placeholder="초대 코드 8자리" autocomplete="off">
+        <button id="joinBtn" class="secondary">커플 방 참여하기</button>
+      </div>
+
+      <div id="roomInfo" class="section hidden">
+        <h3>💞 우리 방 초대 코드</h3>
+        <div id="inviteCode" class="invite"></div>
+        <button id="copyBtn" class="secondary">초대 코드 복사하기</button>
+        <p>상대방에게 코드를 보내 줘!</p>
+      </div>
+
+      <button id="changeNameBtn">닉네임 변경</button>
     </section>
 
-    <section class="card">
-      <h2>🎮 오늘의 질문 카테고리</h2>
-      <button class="category" data-category="memory">📸 추억 기억력 대결</button>
-      <button class="category" data-category="chaos">🔥 커플 파국 대결</button>
-      <button class="category" data-category="mind">🧠 내 마음을 맞혀봐</button>
-      <p id="selected" class="muted">카테고리를 선택해 봐!</p>
-      <p class="muted">질문 선택 화면이야. 실제 답변 제출 및 공개는 다음 단계에서 연결할 거야.</p>
-    </section>
-  </section>
+    <div id="status" role="status" aria-live="polite"></div>
+    <p class="small">우리 둘만의 작은 게임 🌷</p>
+  </main>
 
-  <section class="card">
-    <p id="status" role="status">Supabase 연결을 준비하고 있어...</p>
-  </section>
-  <footer>둘만의 비밀스러운 커플 게임 💌</footer>
-</main>
+  <script>
+    const SUPABASE_URL = "https://dcdattftbhwbpxzndeks.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_hp22uPBJ62LJjSBQe9q3rg_Km4d8zd9";
 
-<script>
-  // 공개용 연결 정보. 비밀 키는 절대로 넣지 마세요.
-  const SUPABASE_URL = "https://dcdattftbhwbpxzndeks.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_hp22uPBJ62LJjSBQe9q3rg_Km4d8zd9";
+    const client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
-  const client = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+    const $ = (id) => document.getElementById(id);
+    let currentNickname = "";
+    let currentRoomCode = "";
 
-  const $ = id => document.getElementById(id);
-  let currentCode = "";
-
-  function message(text) {
-    $("status").textContent = text;
-  }
-
-  function busy(button, value) {
-    button.disabled = value;
-  }
-
-  async function runButton(button, task) {
-    busy(button, true);
-    try {
-      await task();
-    } catch (e) {
-      message(e.message || "오류가 발생했어. 다시 시도해 줘.");
-    } finally {
-      busy(button, false);
-    }
-  }
-
-  async function refreshSession() {
-    const { data, error } = await client.auth.getSession();
-    if (error) throw error;
-
-    const user = data.session?.user;
-    $("auth").classList.toggle("hidden", !!user);
-    $("app").classList.toggle("hidden", !user);
-
-    if (user) {
-      $("account").textContent = "로그인 계정: " + user.email;
-      message("로그인 성공! 커플 방을 만들거나 초대 코드로 입장해 줘.");
-    } else {
-      message("이메일로 회원가입하거나 로그인해 줘.");
-    }
-  }
-
-  $("signup").onclick = () => runButton($("signup"), async () => {
-    const email = $("email").value.trim();
-    const password = $("password").value;
-    if (!email || password.length < 8) {
-      throw new Error("이메일을 입력하고 비밀번호를 8자 이상 설정해 줘.");
+    function status(message, error = false) {
+      $("status").textContent = message;
+      $("status").style.color = error ? "#c03965" : "#765180";
     }
 
-    const { data, error } = await client.auth.signUp({ email, password });
-    if (error) throw error;
-
-    if (data.session) {
-      await refreshSession();
-      message("회원가입 완료! 이제 커플 방을 만들 수 있어.");
-    } else {
-      message("가입 요청 완료! 이메일 인증 링크를 확인해 줘. 인증 후 로그인해 줘.");
+    function showNicknameScreen() {
+      $("nicknameScreen").classList.remove("hidden");
+      $("gameScreen").classList.add("hidden");
+      $("nickname").value = currentNickname;
     }
-  });
 
-  $("login").onclick = () => runButton($("login"), async () => {
-    const email = $("email").value.trim();
-    const password = $("password").value;
-    const { error } = await client.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    await refreshSession();
-  });
+    function showGameScreen() {
+      $("nicknameScreen").classList.add("hidden");
+      $("gameScreen").classList.remove("hidden");
+      $("welcome").textContent = currentNickname + " 님, 환영해! 💕";
+    }
 
-  $("logout").onclick = () => runButton($("logout"), async () => {
-    const { error } = await client.auth.signOut();
-    if (error) throw error;
-    $("room").classList.add("hidden");
-    currentCode = "";
-    await refreshSession();
-  });
+    async function startGame() {
+      const nickname = $("nickname").value.trim();
 
-  $("createRoom").onclick = () => runButton($("createRoom"), async () => {
-    const { data, error } = await client.rpc("create_couple_room");
-    if (error) throw error;
-    if (!data?.invite_code) throw new Error("초대 코드를 받지 못했어.");
-    showRoom(data.invite_code);
-    message("커플 방을 만들었어! 초대 코드를 상대방에게 보내 줘.");
-  });
+      if (!nickname) {
+        status("닉네임을 먼저 입력해 줘!", true);
+        return;
+      }
 
-  $("joinRoom").onclick = () => runButton($("joinRoom"), async () => {
-    const code = $("invite").value.trim().toUpperCase();
-    if (code.length !== 8) throw new Error("초대 코드 8자리를 입력해 줘.");
+      if (nickname.length > 20) {
+        status("닉네임은 20자 이내로 입력해 줘.", true);
+        return;
+      }
 
-    const { data, error } = await client.rpc("join_couple_room", {
-      p_code: code
+      $("startBtn").disabled = true;
+      status("게임을 준비하고 있어... 💗");
+
+      try {
+        const { data: sessionData, error: sessionError } =
+          await client.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        if (!sessionData.session) {
+          const { error } = await client.auth.signInAnonymously();
+          if (error) throw error;
+        }
+
+        const { error: profileError } = await client.auth.updateUser({
+          data: { nickname: nickname }
+        });
+
+        if (profileError) throw profileError;
+
+        currentNickname = nickname;
+        localStorage.setItem("couple_game_nickname", nickname);
+        showGameScreen();
+        status("준비 완료! 이제 방을 만들거나 초대 코드로 참여해 봐.");
+      } catch (error) {
+        status(
+          "시작하지 못했어: " + (error.message || "잠시 후 다시 시도해 줘."),
+          true
+        );
+      } finally {
+        $("startBtn").disabled = false;
+      }
+    }
+
+    async function createRoom() {
+      $("createBtn").disabled = true;
+      status("커플 방을 만들고 있어...");
+
+      try {
+        const { data, error } = await client.rpc("create_couple_room");
+        if (error) throw error;
+
+        currentRoomCode = data.invite_code;
+        $("inviteCode").textContent = currentRoomCode;
+        $("roomInfo").classList.remove("hidden");
+        status("방 생성 성공! 💗 상대방에게 초대 코드를 보내 줘.");
+      } catch (error) {
+        status("방 만들기 실패: " + error.message, true);
+      } finally {
+        $("createBtn").disabled = false;
+      }
+    }
+
+    async function joinRoom() {
+      const code = $("inviteInput").value.trim().toUpperCase();
+
+      if (!code) {
+        status("초대 코드를 입력해 줘!", true);
+        return;
+      }
+
+      $("joinBtn").disabled = true;
+      status("초대 코드를 확인하고 있어...");
+
+      try {
+        const { data, error } = await client.rpc("join_couple_room", {
+          p_code: code
+        });
+
+        if (error) throw error;
+
+        currentRoomCode = code;
+        $("inviteCode").textContent = currentRoomCode;
+        $("roomInfo").classList.remove("hidden");
+        status("커플 방 참여 성공! 💞 이제 방 연결이 완료됐어.");
+      } catch (error) {
+        status("방 참여 실패: " + error.message, true);
+      } finally {
+        $("joinBtn").disabled = false;
+      }
+    }
+
+    $("startBtn").addEventListener("click", startGame);
+    $("nickname").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") startGame();
     });
-    if (error) throw error;
+    $("createBtn").addEventListener("click", createRoom);
+    $("joinBtn").addEventListener("click", joinRoom);
 
-    showRoom(code);
-    message(data?.message || "커플 방에 연결됐어!");
-  });
+    $("copyBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(currentRoomCode);
+        status("초대 코드를 복사했어! 상대방에게 보내 줘.");
+      } catch {
+        status("초대 코드: " + currentRoomCode);
+      }
+    });
 
-  function showRoom(code) {
-    currentCode = code;
-    $("code").textContent = code;
-    $("room").classList.remove("hidden");
-  }
+    $("changeNameBtn").addEventListener("click", () => {
+      showNicknameScreen();
+      status("새 닉네임을 입력해 줘. 기존 익명 계정은 유지돼.");
+    });
 
-  $("copyCode").onclick = async () => {
-    if (!currentCode) return;
-    try {
-      await navigator.clipboard.writeText(currentCode);
-      message("초대 코드를 복사했어!");
-    } catch {
-      message("초대 코드: " + currentCode + "\n코드를 직접 복사해 줘.");
+    async function init() {
+      const savedNickname =
+        localStorage.getItem("couple_game_nickname") || "";
+
+      const { data } = await client.auth.getSession();
+
+      if (data.session && savedNickname) {
+        currentNickname = savedNickname;
+        showGameScreen();
+        status("다시 왔구나! 원하는 기능을 선택해 줘.");
+      } else {
+        currentNickname = savedNickname;
+        showNicknameScreen();
+      }
     }
-  };
 
-  document.querySelectorAll("[data-category]").forEach(button => {
-    button.onclick = () => {
-      const labels = {
-        memory: "📸 추억 기억력 대결",
-        chaos: "🔥 커플 파국 대결",
-        mind: "🧠 내 마음을 맞혀봐"
-      };
-      $("selected").textContent = labels[button.dataset.category] + " 선택!";
-    };
-  });
-
-  client.auth.onAuthStateChange(() => {
-    refreshSession().catch(e => message(e.message));
-  });
-
-  refreshSession().catch(e => message("연결 오류: " + e.message));
-</script>
+    init();
+  </script>
 </body>
 </html>
