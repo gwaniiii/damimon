@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>우리 진짜 맞아? 💘</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #48263b;
+      background: linear-gradient(145deg, #fff1f7, #f5eaff);
+    }
+    .wrap {
+      width: min(100% - 32px, 520px);
+      margin: auto;
+      padding: 32px 0;
+    }
+    .brand { text-align: center; font-size: 14px; letter-spacing: 3px; color: #c04480; }
+    h1 { text-align: center; font-size: 36px; margin: 14px 0; }
+    .sub { text-align: center; color: #88677d; line-height: 1.7; }
+    .hero {
+      margin: 28px 0;
+      padding: 28px 20px;
+      text-align: center;
+      border-radius: 28px;
+      background: white;
+      box-shadow: 0 12px 40px #b74b8015;
+    }
+    .heart { font-size: 54px; }
+    .hero h2 { margin-bottom: 8px; }
+    .categories { display: grid; gap: 12px; }
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: 0;
+      border-radius: 16px;
+      padding: 18px;
+      background: white;
+      color: #48263b;
+      text-align: left;
+      box-shadow: 0 4px 18px #b74b8010;
+    }
+    button:hover { outline: 2px solid #f2a4ca; }
+    .emoji { font-size: 25px; margin-right: 10px; }
+    .desc { display: block; color: #92778a; font-size: 13px; margin: 8px 0 0 40px; }
+    .primary {
+      display: block;
+      width: 100%;
+      margin-top: 22px;
+      background: #e94d91;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+    #notice {
+      min-height: 24px;
+      text-align: center;
+      margin-top: 16px;
+      color: #a32e68;
+    }
+    footer { text-align: center; color: #a48b9d; font-size: 12px; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="brand">LOVE TEST · COUPLE GAME</div>
+    <h1>우리 진짜 맞아? 💘</h1>
+    <p class="sub">우리의 기억은 같을까, 다를까?<br>서로의 답을 맞혀 봐!</p>
+
+    <section class="hero">
+      <div class="heart">💗</div>
+      <h2>사랑은 기억력 테스트</h2>
+      <p>같으면 운명, 다르면 해명 타임! 😂</p>
+    </section>
+
+    <h3>오늘은 어떤 대결을 할까?</h3>
+    <section class="categories">
+      <button onclick="choose('memory')">
+        <span class="emoji">📸</span><strong>추억 기억력 대결</strong>
+        <span class="desc">첫 키스, 첫 데이트, 우리의 기념일</span>
+      </button>
+      <button onclick="choose('chaos')">
+        <span class="emoji">🔥</span><strong>커플 파국 대결</strong>
+        <span class="desc">누가 더 질투가 많고, 누가 먼저 좋아했을까?</span>
+      </button>
+      <button onclick="choose('mind')">
+        <span class="emoji">🧠</span><strong>내 마음을 맞혀봐</strong>
+        <span class="desc">내가 좋아하는 것과 서운해하는 행동</span>
+      </button>
+    </section>
+
+    <button class="primary" onclick="startGame()">게임 준비하기 →</button>
+    <div id="notice" role="status"></div>
+    <footer>둘만의 비밀스러운 커플 게임 💌</footer>
+  </main>
+
+  <script>
+    let selectedCategory = "memory";
+
+    function choose(category) {
+      selectedCategory = category;
+      const names = {
+        memory: "추억 기억력 대결",
+        chaos: "커플 파국 대결",
+        mind: "내 마음을 맞혀봐"
+      };
+      document.getElementById("notice").textContent =
+        names[category] + "을(를) 선택했어!";
+    }
+
+    function startGame() {
+      const names = {
+        memory: "추억 기억력 대결",
+        chaos: "커플 파국 대결",
+        mind: "내 마음을 맞혀봐"
+      };
+      document.getElementById("notice").textContent =
+        names[selectedCategory] + " 선택 완료! 다음 단계에서 방 만들기와 로그인 기능을 연결할 거야.";
+    }
+  </script>
+</body>
+</html>
