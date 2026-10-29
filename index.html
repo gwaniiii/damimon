@@ -2,20 +2,23 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff3f8">
   <title>우리 진짜 맞아? 💗</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
-      --pink: #ff83ad;
-      --pink-dark: #ed6095;
-      --lavender: #a997ff;
-      --ink: #55445d;
-      --muted: #918399;
-      --line: #f3dce8;
+      --pink: #ff80aa;
+      --pink-dark: #ed5f91;
+      --purple: #a68cff;
+      --purple-light: #f0eaff;
+      --ink: #49394f;
+      --muted: #9b8da0;
+      --line: #f2dce8;
       --bg: #fff7fb;
-      --white: #ffffff;
-      --green: #25865d;
+      --green: #24875c;
+      --shadow: 0 12px 35px rgba(174, 104, 143, .10);
     }
 
     * { box-sizing: border-box; }
@@ -23,407 +26,751 @@
     body {
       margin: 0;
       min-height: 100vh;
-      padding: 24px 14px 40px;
-      font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-        "Malgun Gothic", sans-serif;
+      padding: 18px 14px 36px;
+      font-family: -apple-system, BlinkMacSystemFont,
+        "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at 10% 10%, #ffe1ed 0, transparent 28%),
-        radial-gradient(circle at 90% 30%, #e8e1ff 0, transparent 30%),
+        radial-gradient(ellipse at 5% 5%, #ffe0ed 0, transparent 32%),
+        radial-gradient(ellipse at 95% 22%, #e8e0ff 0, transparent 30%),
         var(--bg);
     }
 
-    .container {
-      width: 100%;
-      max-width: 540px;
-      margin: 0 auto;
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .app {
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 3px 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 900;
+      letter-spacing: -.7px;
+    }
+
+    .brand-icon {
+      width: 39px;
+      height: 39px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: white;
+      box-shadow: var(--shadow);
+      font-size: 21px;
+    }
+
+    .room-chip {
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      background: white;
+      border: 1px solid var(--line);
+      padding: 9px 12px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #947b9b;
     }
 
     .hero {
+      padding: 14px 8px 24px;
       text-align: center;
-      padding: 18px 8px 24px;
     }
 
-    .heart {
-      font-size: 42px;
-      animation: beat 1.6s infinite;
-    }
-
-    @keyframes beat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.12); }
+    .hero-art {
+      width: 105px;
+      height: 105px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border-radius: 34px;
+      background: linear-gradient(145deg, #ffe0ed, #eee4ff);
+      box-shadow: 0 14px 32px #d4a2c32b;
+      font-size: 51px;
+      transform: rotate(-3deg);
     }
 
     h1 {
-      margin: 8px 0;
-      font-size: clamp(28px, 7vw, 38px);
-      letter-spacing: -1.5px;
+      font-size: clamp(29px, 8vw, 39px);
+      letter-spacing: -1.7px;
+      line-height: 1.2;
+      margin: 0 0 10px;
     }
 
     .subtitle {
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
+      font-size: 13px;
+      line-height: 1.75;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, .96);
       border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 24px;
-      margin-bottom: 16px;
-      box-shadow: 0 10px 35px rgba(180, 110, 150, 0.09);
-    }
-
-    h2 {
-      font-size: 21px;
-      margin: 0 0 10px;
-      letter-spacing: -0.6px;
-    }
-
-    p {
-      line-height: 1.65;
-    }
-
-    label {
-      display: block;
-      font-weight: 700;
-      font-size: 13px;
-      margin: 16px 0 8px;
-    }
-
-    input, textarea {
-      width: 100%;
-      border: 1px solid #ead7e5;
-      border-radius: 14px;
-      padding: 14px;
-      background: #fffafd;
-      color: var(--ink);
-      font: inherit;
-      outline: none;
-    }
-
-    input:focus, textarea:focus {
-      border-color: var(--pink);
-      box-shadow: 0 0 0 3px #ff83ad20;
-    }
-
-    textarea {
-      min-height: 105px;
-      resize: vertical;
-    }
-
-    button {
-      border: 0;
-      border-radius: 14px;
-      padding: 14px 16px;
-      width: 100%;
-      font: inherit;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 12px;
-      color: white;
-      background: linear-gradient(135deg, var(--pink), var(--pink-dark));
-      box-shadow: 0 5px 14px #ed609526;
-      transition: transform 0.15s, opacity 0.15s;
-    }
-
-    button:hover { transform: translateY(-1px); }
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.55;
-      transform: none;
-    }
-
-    button.secondary {
-      color: #755fc1;
-      background: #f0ebff;
-      box-shadow: none;
-    }
-
-    button.light {
-      color: var(--ink);
-      background: #fff0f6;
-      box-shadow: none;
-    }
-
-    .divider {
-      border: 0;
-      border-top: 1px solid var(--line);
-      margin: 22px 0;
+      border-radius: 25px;
+      padding: 22px;
+      margin-bottom: 15px;
+      box-shadow: var(--shadow);
     }
 
     .hidden { display: none !important; }
 
+    h2 {
+      margin: 0 0 9px;
+      font-size: 21px;
+      letter-spacing: -.7px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .label {
+      display: block;
+      margin: 18px 0 8px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      color: var(--ink);
+      background: #fffafd;
+      border: 1px solid #ead9e7;
+      border-radius: 14px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px #ff80aa24;
+    }
+
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 11px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 14px;
+      color: white;
+      background: linear-gradient(120deg, var(--pink), var(--pink-dark));
+      box-shadow: 0 7px 17px #ed5f9125;
+      transition: transform .15s, opacity .15s;
+    }
+
+    .btn:active { transform: scale(.98); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    .btn.purple {
+      background: var(--purple-light);
+      color: #765db6;
+      box-shadow: none;
+    }
+
+    .btn.soft {
+      background: #fff0f6;
+      color: #a54d76;
+      box-shadow: none;
+    }
+
+    .separator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: #b8a8ba;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .separator::before,
+    .separator::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
     .notice {
       display: none;
-      padding: 13px 15px;
+      margin-bottom: 13px;
       border-radius: 14px;
-      margin-bottom: 16px;
-      line-height: 1.55;
-      font-size: 14px;
+      padding: 13px 15px;
+      font-size: 13px;
+      line-height: 1.6;
       overflow-wrap: anywhere;
     }
 
     .notice.show { display: block; }
-    .notice.error { color: #a52e53; background: #ffe7ef; }
-    .notice.success { color: #226a4a; background: #e7f8ef; }
-    .notice.info { color: #6955a6; background: #f0ebff; }
+    .notice.error { background: #ffe8ef; color: #a33459; }
+    .notice.success { background: #e6f8ed; color: #226b4a; }
+    .notice.info { background: #f0eaff; color: #6d56a7; }
 
     .room-code {
-      font-size: 27px;
-      letter-spacing: 4px;
-      font-weight: 900;
+      margin: 16px 0;
+      padding: 16px;
+      border-radius: 17px;
+      background: #fff0f6;
       text-align: center;
       color: var(--pink-dark);
-      padding: 15px;
-      border-radius: 16px;
-      background: #fff0f6;
+      font-size: 28px;
+      font-weight: 1000;
+      letter-spacing: 4px;
       overflow-wrap: anywhere;
-      margin: 16px 0;
     }
 
-    .small {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .pill {
+    .eyebrow {
       display: inline-block;
-      background: #f0ebff;
-      color: #755fc1;
-      padding: 6px 10px;
-      border-radius: 100px;
-      font-size: 12px;
-      font-weight: 800;
+      padding: 7px 10px;
+      border-radius: 99px;
+      background: #f0eaff;
+      color: #8068be;
+      font-size: 10px;
+      font-weight: 1000;
+      letter-spacing: .8px;
       margin-bottom: 12px;
     }
 
-    .question {
-      font-size: 25px;
-      line-height: 1.45;
+    .players {
+      display: grid;
+      grid-template-columns: 1fr 35px 1fr;
+      align-items: center;
+      gap: 9px;
+      margin: 18px 0;
+    }
+
+    .player {
+      text-align: center;
+      padding: 13px 5px;
+      border-radius: 18px;
+      background: #fff5f9;
+      border: 1px solid #f7dfeb;
+      min-width: 0;
+    }
+
+    .player.partner { background: #f7f3ff; border-color: #e7ddff; }
+
+    .avatar {
+      width: 51px;
+      height: 51px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 8px;
+      border-radius: 18px;
+      font-size: 27px;
+      background: white;
+      box-shadow: 0 4px 12px #b994b41c;
+    }
+
+    .player-name {
+      font-size: 12px;
       font-weight: 900;
-      letter-spacing: -0.8px;
-      margin: 10px 0 20px;
       overflow-wrap: anywhere;
+    }
+
+    .player-status {
+      margin-top: 5px;
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .vs {
+      text-align: center;
+      font-size: 12px;
+      color: var(--pink-dark);
+      font-weight: 1000;
+    }
+
+    .scoreboard {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 15px 16px;
+      background: linear-gradient(120deg, #fff0f6, #f3edff);
+      border-radius: 18px;
+      margin: 13px 0 18px;
+    }
+
+    .score-label {
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .score-value {
+      font-size: 24px;
+      font-weight: 1000;
+      color: #d75b91;
+      white-space: nowrap;
+    }
+
+    .progress-line {
+      height: 7px;
+      overflow: hidden;
+      background: #f1e6f0;
+      border-radius: 99px;
+      margin: 14px 0 7px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--pink), var(--purple));
+      border-radius: inherit;
+      transition: width .3s ease;
+    }
+
+    .progress-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .question-box {
+      padding: 20px 17px;
+      border-radius: 21px;
+      background: linear-gradient(145deg, #fff0f6, #f3efff);
+      margin: 14px 0 17px;
+    }
+
+    .question-number {
+      color: #a27db5;
+      font-size: 11px;
+      font-weight: 1000;
+      margin-bottom: 10px;
+    }
+
+    .question-text {
+      font-size: 24px;
+      font-weight: 1000;
+      letter-spacing: -1px;
+      line-height: 1.48;
+      overflow-wrap: anywhere;
+    }
+
+    .choose-caption {
+      margin: 0 0 11px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .choice {
+      min-height: 112px;
+      padding: 13px 5px;
+      border-radius: 17px;
+      background: white;
+      border: 1.5px solid var(--line);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform .15s, border-color .15s, background .15s;
+      box-shadow: 0 4px 12px #c89eb31a;
+    }
+
+    .choice:active { transform: scale(.96); }
+
+    .choice.selected {
+      background: #fff0f6;
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px #ff80aa1d;
+    }
+
+    .choice-icon {
+      display: block;
+      font-size: 27px;
+      margin-bottom: 9px;
+    }
+
+    .choice-name {
+      display: block;
+      font-size: 12px;
+      font-weight: 1000;
+      overflow-wrap: anywhere;
+    }
+
+    .choice-hint {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.4;
     }
 
     .status-panel {
-      background: #fff7fb;
-      border: 1px solid var(--line);
+      margin: 17px 0;
+      padding: 14px;
       border-radius: 17px;
-      padding: 15px;
-      margin: 16px 0;
+      background: #fffbfd;
+      border: 1px solid var(--line);
     }
 
-    .status-heading {
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 800;
-      margin-bottom: 12px;
+    .status-title {
+      font-size: 12px;
+      font-weight: 1000;
+      margin-bottom: 8px;
     }
 
     .status-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       padding: 10px 0;
-      border-bottom: 1px solid #f5e5ed;
+      border-bottom: 1px solid #f4e6ee;
     }
 
-    .status-row:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
+    .status-row:last-child { border-bottom: 0; padding-bottom: 0; }
 
-    .status-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
+    .status-avatar {
+      width: 31px;
+      height: 31px;
       display: grid;
       place-items: center;
-      background: #f0ebff;
+      background: #f4efff;
+      border-radius: 11px;
       flex-shrink: 0;
-      font-size: 17px;
     }
 
     .status-name {
       flex: 1;
-      font-weight: 800;
+      font-size: 12px;
+      font-weight: 900;
       overflow-wrap: anywhere;
     }
 
     .status-text {
-      font-size: 12px;
-      font-weight: 800;
+      font-size: 10px;
+      font-weight: 1000;
       white-space: nowrap;
     }
 
     .done { color: var(--green); }
-    .pending { color: #9a8ba0; }
+    .pending { color: #a99aa9; }
 
-    .waiting-box {
+    .waiting {
       text-align: center;
-      padding: 18px 8px 8px;
+      padding: 14px 3px 7px;
     }
 
-    .waiting-emoji { font-size: 42px; }
+    .waiting-art {
+      font-size: 54px;
+      margin: 6px 0 13px;
+    }
 
-    .result-item {
-      background: #fff7fb;
-      border: 1px solid var(--line);
+    .waiting-title {
+      font-size: 23px;
+      font-weight: 1000;
+      letter-spacing: -.8px;
+    }
+
+    .result-banner {
+      text-align: center;
+      padding: 17px 12px;
+      background: linear-gradient(145deg, #fff0f6, #f0eaff);
+      border-radius: 20px;
+      margin: 13px 0 18px;
+    }
+
+    .result-emoji { font-size: 42px; }
+
+    .result-match {
+      font-size: 24px;
+      font-weight: 1000;
+      margin-top: 8px;
+      letter-spacing: -.7px;
+    }
+
+    .answer-card {
+      padding: 14px;
       border-radius: 16px;
-      padding: 15px;
-      margin: 12px 0;
+      background: #fff9fc;
+      border: 1px solid var(--line);
+      margin: 10px 0;
     }
 
-    .result-name {
-      font-size: 13px;
+    .answer-person {
+      font-size: 11px;
       color: var(--muted);
-      font-weight: 800;
-      margin-bottom: 7px;
+      font-weight: 900;
+      margin-bottom: 6px;
     }
 
-    .result-answer {
-      font-size: 17px;
-      font-weight: 800;
-      white-space: pre-wrap;
+    .answer-value {
+      font-size: 16px;
+      font-weight: 1000;
       overflow-wrap: anywhere;
     }
 
     .footer {
       text-align: center;
-      color: #aa98a9;
-      font-size: 12px;
-      padding: 10px;
+      padding: 14px 8px;
+      color: #b2a0b1;
+      font-size: 10px;
+      line-height: 1.8;
     }
 
-    @media (max-width: 420px) {
-      .card { padding: 19px; }
-      .status-text { font-size: 11px; }
-      .question { font-size: 23px; }
+    @media (max-width: 370px) {
+      .card { padding: 17px; }
+      .choices { gap: 6px; }
+      .choice-name { font-size: 11px; }
+      .question-text { font-size: 22px; }
     }
   </style>
 </head>
 
 <body>
-  <main class="container">
-    <header class="hero">
-      <div class="heart">💗</div>
-      <h1>우리 진짜 맞아?</h1>
-      <div class="subtitle">
-        서로의 마음을 얼마나 잘 알고 있을까?<br>
-        둘이 답을 제출하면 결과가 공개돼!
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">💗</div>
+        <span>우리 진짜 맞아?</span>
       </div>
+      <div id="roomChip" class="room-chip">COUPLE GAME</div>
     </header>
 
-    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+    <section class="hero">
+      <div class="hero-art">🐰💞🐻</div>
+      <h1>우리 진짜<br>잘 맞을까?</h1>
+      <div class="subtitle">
+        둘이 선택하고, 결과를 공개하고!<br>
+        우리의 케미를 확인해 보자 💕
+      </div>
+    </section>
 
-    <section id="profileCard" class="card">
-      <h2>💕 먼저 이름을 알려줘</h2>
-      <p class="small">두 사람이 서로 다른 기기에서 각자 이름으로 참여하면 돼.</p>
-      <label for="nickname">내 이름</label>
+    <div id="notice" class="notice" aria-live="polite"></div>
+
+    <!-- 닉네임 -->
+    <section id="profileScreen" class="card">
+      <span class="eyebrow">WELCOME, LOVEBIRDS</span>
+      <h2>누가 플레이하나요? 🐣</h2>
+      <p class="muted">게임에서 사용할 이름을 입력해 줘.</p>
+
+      <label class="label" for="nickname">내 이름</label>
       <input id="nickname" maxlength="20" placeholder="예: 태관" autocomplete="nickname">
-      <button id="continueBtn" onclick="continueToRoom()">시작하기 💗</button>
+
+      <button class="btn" id="continueBtn" onclick="continueToRoom()">
+        게임 시작하기 💗
+      </button>
     </section>
 
-    <section id="roomCard" class="card hidden">
-      <h2>💌 커플 방</h2>
-      <p class="small">한 명이 방을 만들고, 다른 한 명은 초대 코드를 입력해.</p>
+    <!-- 방 만들기 / 참여 -->
+    <section id="roomScreen" class="card hidden">
+      <span class="eyebrow">LET'S PLAY TOGETHER</span>
+      <h2>우리 둘만의 게임방 💌</h2>
+      <p class="muted">한 명이 방을 만들고, 다른 한 명은 초대 코드로 들어와.</p>
 
-      <button id="createRoomBtn" onclick="createRoom()">새 커플 방 만들기</button>
+      <button class="btn" id="createBtn" onclick="createRoom()">
+        새 커플 방 만들기 ✨
+      </button>
 
-      <div class="divider"></div>
+      <div class="separator">또는 초대 코드가 있다면</div>
 
-      <label for="inviteCode">초대 코드 입력</label>
-      <input id="inviteCode" maxlength="12" placeholder="상대방의 초대 코드" autocomplete="off">
-      <button class="secondary" id="joinRoomBtn" onclick="joinRoom()">초대 코드로 참여하기</button>
+      <label class="label" for="inviteCode">초대 코드</label>
+      <input id="inviteCode" maxlength="12" placeholder="상대방의 초대 코드">
+
+      <button class="btn purple" id="joinBtn" onclick="joinRoom()">
+        커플 방 참여하기 🫶
+      </button>
     </section>
 
-    <section id="lobbyCard" class="card hidden">
-      <span class="pill">OUR COUPLE ROOM 💗</span>
-      <h2>우리의 커플 방</h2>
-      <p class="small">상대방에게 아래 코드를 알려줘. 같은 방에 들어오면 게임을 시작할 수 있어.</p>
-      <div id="roomCodeDisplay" class="room-code">--------</div>
-      <button class="secondary" onclick="copyRoomCode()">초대 코드 복사하기</button>
-      <div id="memberInfo" class="small" style="margin-top:14px;"></div>
-      <button id="startBtn" onclick="startGame()">질문 시작하기 🎲</button>
-      <button class="light" onclick="leaveRoomOnThisDevice()">이 기기에서 방 연결 해제</button>
+    <!-- 로비 -->
+    <section id="lobbyScreen" class="card hidden">
+      <span class="eyebrow">OUR LITTLE WORLD</span>
+      <h2>게임 준비 완료! 🎀</h2>
+      <p class="muted">상대방도 같은 방에 들어오면 질문을 시작할 수 있어.</p>
+
+      <div id="roomCode" class="room-code">--------</div>
+      <button class="btn purple" onclick="copyRoomCode()">초대 코드 복사하기</button>
+
+      <div class="players" id="lobbyPlayers"></div>
+
+      <button class="btn" id="startBtn" onclick="startGame()">
+        대결 시작하기 🎮
+      </button>
+
+      <p class="muted" style="text-align:center">
+        같은 방에서 이미 플레이한 질문은 다시 나오지 않아.
+      </p>
+
+      <button class="btn soft" onclick="leaveRoomOnThisDevice()">
+        이 기기에서 방 연결 해제
+      </button>
     </section>
 
-    <section id="questionCard" class="card hidden">
-      <span class="pill">💭 QUESTION TIME</span>
-      <h2>이번 질문은...</h2>
-      <div id="questionText" class="question"></div>
+    <!-- 질문 -->
+    <section id="gameScreen" class="card hidden">
+      <span class="eyebrow">ROUND BY ROUND 💕</span>
 
-      <div id="questionStatuses" class="status-panel">
-        <div class="status-heading">💌 서로의 답변 현황</div>
-        <div id="questionStatusRows"></div>
+      <div class="scoreboard">
+        <div>
+          <div class="score-label">💖 우리 커플의 케미 점수</div>
+          <div class="muted" id="roundCaption">첫 번째 질문에 도전해 봐!</div>
+        </div>
+        <div class="score-value"><span id="scoreValue">0</span>점</div>
       </div>
 
-      <label for="answerInput">내 답변</label>
-      <textarea id="answerInput" maxlength="500" placeholder="솔직하게 답변해 봐 💗"></textarea>
-      <p class="small">답변을 제출하면 수정할 수 없어. 상대방도 제출해야 답변이 공개돼!</p>
-      <button id="submitBtn" onclick="submitAnswer()">답변 제출하기 💌</button>
+      <div class="progress-caption">
+        <span>우리의 케미 여정</span>
+        <span id="progressText">0문제 완료</span>
+      </div>
+      <div class="progress-line">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+
+      <div class="question-box">
+        <div id="questionNumber" class="question-number">QUESTION 01</div>
+        <div id="questionText" class="question-text">질문을 불러오는 중...</div>
+      </div>
+
+      <p class="choose-caption">누구라고 생각해? 하나를 골라 봐 👇</p>
+      <div id="choices" class="choices"></div>
+
+      <div id="gameStatuses" class="status-panel">
+        <div class="status-title">💌 답변 현황</div>
+        <div id="gameStatusRows"></div>
+      </div>
+
+      <button class="btn" id="submitBtn" onclick="submitAnswer()">
+        이 답으로 결정! 💘
+      </button>
+      <p class="muted" style="text-align:center">
+        둘 다 제출하면 답변이 동시에 공개돼!
+      </p>
     </section>
 
-    <section id="waitingCard" class="card hidden">
-      <div class="waiting-box">
-        <div class="waiting-emoji">💌</div>
-        <h2>내 답변은 제출 완료!</h2>
-        <p>상대방이 답변할 때까지 기다리는 중이야.</p>
-        <p class="small">상대방이 제출하면 결과가 자동으로 공개돼.</p>
+    <!-- 기다리는 중 -->
+    <section id="waitingScreen" class="card hidden">
+      <div class="waiting">
+        <div class="waiting-art">💌🐰</div>
+        <div class="waiting-title">내 선택 완료!</div>
+        <p class="muted">상대방도 선택할 때까지 기다리는 중이야.</p>
+        <p class="muted">누가 어떤 답을 골랐는지는 아직 비밀 🤫</p>
       </div>
-      <div id="waitingStatuses" class="status-panel">
-        <div class="status-heading">💗 답변 현황</div>
+
+      <div class="scoreboard">
+        <div>
+          <div class="score-label">💖 현재 케미 점수</div>
+          <div class="muted" id="waitingRoundCaption">결과를 기다리는 중</div>
+        </div>
+        <div class="score-value"><span id="waitingScore">0</span>점</div>
+      </div>
+
+      <div class="status-panel">
+        <div class="status-title">💌 답변 현황</div>
         <div id="waitingStatusRows"></div>
       </div>
     </section>
 
-    <section id="resultCard" class="card hidden">
-      <span class="pill">💖 ANSWERS REVEALED</span>
-      <h2>두 사람의 답변 공개!</h2>
-      <div id="resultQuestion" class="question"></div>
+    <!-- 결과 -->
+    <section id="resultScreen" class="card hidden">
+      <span class="eyebrow">ANSWER REVEALED ✨</span>
+      <h2>두 사람의 선택은... 👀</h2>
+
+      <div class="result-banner">
+        <div id="resultEmoji" class="result-emoji">💞</div>
+        <div id="resultHeadline" class="result-match">결과 확인!</div>
+        <p id="resultDescription" class="muted"></p>
+      </div>
+
+      <div class="question-box">
+        <div id="resultQuestionNumber" class="question-number">ROUND RESULT</div>
+        <div id="resultQuestion" class="question-text"></div>
+      </div>
+
       <div id="resultAnswers"></div>
-      <p class="small">서로의 답변을 비교해 봐. 얼마나 잘 맞았을까? 😆</p>
-      <button id="nextBtn" onclick="nextQuestion()">다음 질문 뽑기 🎲</button>
+
+      <div class="scoreboard">
+        <div>
+          <div class="score-label">💖 누적 케미 점수</div>
+          <div class="muted" id="resultRoundCaption">우리 둘의 기록</div>
+        </div>
+        <div class="score-value"><span id="resultScore">0</span>점</div>
+      </div>
+
+      <button class="btn" id="nextBtn" onclick="nextQuestion()">
+        다음 질문 대결하기 🎮
+      </button>
+      <button class="btn purple" onclick="backToLobby()">
+        방으로 돌아가기
+      </button>
     </section>
 
-    <footer class="footer">Made with love 💗 우리 둘만의 작은 게임</footer>
+    <footer class="footer">
+      둘의 마음을 맞춰 가는 작은 게임 💗<br>
+      MADE WITH LOVE
+    </footer>
   </main>
 
   <script>
+    // Supabase 연결 정보
     const SUPABASE_URL = "https://dcdattftbhwbpxzndeks.supabase.co";
     const SUPABASE_KEY = "sb_publishable_hp22uPBJ62LJjSBQe9q3rg_Km4d8zd9";
-
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const $ = id => document.getElementById(id);
 
     let currentUser = null;
     let currentNickname = "";
-    let currentRoomId = localStorage.getItem("couple_game_room_id");
-    let currentRoomCode = localStorage.getItem("couple_game_room_code");
-    let currentGameState = null;
+    let roomId = localStorage.getItem("couple_game_room_id");
+    let roomCode = localStorage.getItem("couple_game_room_code");
+    let state = null;
+    let selectedAnswer = null;
     let pollTimer = null;
     let busy = false;
+    let changingScreen = false;
 
-    const $ = (id) => document.getElementById(id);
-
-    function showNotice(message, type = "info") {
-      const el = $("notice");
-      el.textContent = message;
-      el.className = "notice show " + type;
+    function notice(message, type = "info") {
+      $("notice").textContent = message;
+      $("notice").className = "notice show " + type;
     }
 
-    function hideNotice() {
-      $("notice").className = "notice";
+    function clearNotice() {
       $("notice").textContent = "";
+      $("notice").className = "notice";
+    }
+
+    function showScreen(id) {
+      [
+        "profileScreen", "roomScreen", "lobbyScreen",
+        "gameScreen", "waitingScreen", "resultScreen"
+      ].forEach(screen => $(screen).classList.add("hidden"));
+
+      $(id).classList.remove("hidden");
+      changingScreen = true;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      changingScreen = false;
     }
 
     function setBusy(value) {
       busy = value;
       [
-        "continueBtn", "createRoomBtn", "joinRoomBtn",
+        "continueBtn", "createBtn", "joinBtn",
         "startBtn", "submitBtn", "nextBtn"
       ].forEach(id => {
         const el = $(id);
@@ -431,42 +778,51 @@
       });
     }
 
-    function showOnly(sectionId) {
-      [
-        "profileCard", "roomCard", "lobbyCard",
-        "questionCard", "waitingCard", "resultCard"
-      ].forEach(id => $(id).classList.add("hidden"));
-
-      if (sectionId) $(sectionId).classList.remove("hidden");
-    }
-
-    function getFriendlyError(error) {
+    function friendlyError(error) {
       const message = error?.message || "알 수 없는 오류가 발생했어.";
+
       if (message.includes("이미 다른 방")) return message;
-      if (message.includes("초대 코드를 찾을 수 없습니다")) return "초대 코드를 찾을 수 없어. 코드를 다시 확인해 줘.";
-      if (message.includes("이미 두 명")) return "이 방에는 이미 두 명이 참여하고 있어.";
-      if (message.includes("참여자가 아닙니다")) return "현재 계정이 이 커플 방에 연결되어 있지 않아.";
+      if (message.includes("초대 코드를 찾을 수 없습니다")) {
+        return "초대 코드를 찾을 수 없어. 다시 확인해 줘.";
+      }
+      if (message.includes("이미 두 명")) {
+        return "이미 두 명이 참여한 방이야.";
+      }
+      if (message.includes("두 사람이 모두")) {
+        return "상대방도 먼저 방에 참여해야 게임을 시작할 수 있어.";
+      }
+      if (message.includes("모든 질문을 플레이")) {
+        return "준비된 질문을 모두 플레이했어! 새로운 질문이 필요해.";
+      }
       return message;
     }
 
     async function ensureAuth() {
       const name = $("nickname").value.trim() || currentNickname || "익명";
-      if (name.length > 20) throw new Error("이름은 20자 이하로 입력해 줘.");
 
-      const { data: sessionData, error: sessionError } = await db.auth.getSession();
+      if (name.length > 20) {
+        throw new Error("이름은 20자 이하로 입력해 줘.");
+      }
+
+      const { data: sessionData, error: sessionError } =
+        await db.auth.getSession();
+
       if (sessionError) throw sessionError;
 
       if (sessionData.session?.user) {
         currentUser = sessionData.session.user;
+
         const { data, error } = await db.auth.updateUser({
           data: { nickname: name }
         });
+
         if (error) throw error;
         currentUser = data.user;
       } else {
         const { data, error } = await db.auth.signInAnonymously({
           options: { data: { nickname: name } }
         });
+
         if (error) throw error;
         currentUser = data.user;
       }
@@ -478,18 +834,18 @@
 
     async function continueToRoom() {
       if (busy) return;
-      hideNotice();
+      clearNotice();
       setBusy(true);
+
       try {
         await ensureAuth();
-        $("roomCard").classList.remove("hidden");
-        $("profileCard").classList.add("hidden");
+        showScreen("roomScreen");
 
-        if (currentRoomId) {
+        if (roomId) {
           await restoreRoom();
         }
       } catch (error) {
-        showNotice(getFriendlyError(error), "error");
+        notice(friendlyError(error), "error");
       } finally {
         setBusy(false);
       }
@@ -497,7 +853,7 @@
 
     async function createRoom() {
       if (busy) return;
-      hideNotice();
+      clearNotice();
       setBusy(true);
 
       try {
@@ -507,15 +863,15 @@
         if (error) throw error;
 
         const result = typeof data === "string" ? JSON.parse(data) : data;
-        currentRoomId = String(result.couple_id);
-        currentRoomCode = result.invite_code;
 
+        roomId = String(result.couple_id);
+        roomCode = result.invite_code;
         saveRoom();
-        showLobby();
-        showNotice("커플 방을 만들었어! 상대방에게 초대 코드를 보내 줘 💗", "success");
-        await startGameStateRefresh();
+
+        await refreshState();
+        notice("우리만의 게임방이 만들어졌어! 💗", "success");
       } catch (error) {
-        showNotice(getFriendlyError(error), "error");
+        notice(friendlyError(error), "error");
       } finally {
         setBusy(false);
       }
@@ -523,236 +879,392 @@
 
     async function joinRoom() {
       if (busy) return;
-      hideNotice();
+      clearNotice();
       setBusy(true);
 
       try {
         await ensureAuth();
-        const code = $("inviteCode").value.trim().toUpperCase();
 
+        const code = $("inviteCode").value.trim().toUpperCase();
         if (!code) throw new Error("초대 코드를 입력해 줘.");
 
         const { data, error } = await db.rpc("join_couple_room", {
           p_code: code
         });
+
         if (error) throw error;
 
         const result = typeof data === "string" ? JSON.parse(data) : data;
-        currentRoomId = String(result.couple_id);
-        currentRoomCode = result.invite_code || code;
 
+        roomId = String(result.couple_id);
+        roomCode = result.invite_code || code;
         saveRoom();
-        showLobby();
-        showNotice("커플 방에 참여했어! 이제 함께 게임을 할 수 있어 💕", "success");
-        await startGameStateRefresh();
+
+        await refreshState();
+        notice("커플 방에 들어왔어! 이제 함께 플레이해 보자 💕", "success");
       } catch (error) {
-        showNotice(getFriendlyError(error), "error");
+        notice(friendlyError(error), "error");
       } finally {
         setBusy(false);
       }
     }
 
     function saveRoom() {
-      localStorage.setItem("couple_game_room_id", currentRoomId);
-      localStorage.setItem("couple_game_room_code", currentRoomCode || "");
-    }
-
-    function showLobby() {
-      stopPolling();
-      showOnly("lobbyCard");
-      $("roomCodeDisplay").textContent = currentRoomCode || "코드 확인 중";
-      $("memberInfo").textContent = "방에 연결됐어. 두 사람이 같은 초대 코드로 참여했는지 확인해 줘.";
+      localStorage.setItem("couple_game_room_id", roomId);
+      localStorage.setItem("couple_game_room_code", roomCode || "");
+      $("roomChip").textContent = roomCode ? "ROOM " + roomCode : "COUPLE GAME";
     }
 
     async function restoreRoom() {
-      if (!currentRoomId) return;
-      showLobby();
-      await loadGameState(false, true);
+      if (!roomId) return;
+      saveRoom();
+      await refreshState();
     }
 
     async function copyRoomCode() {
-      if (!currentRoomCode) return;
+      if (!roomCode) return;
+
       try {
-        await navigator.clipboard.writeText(currentRoomCode);
-        showNotice("초대 코드를 복사했어! 상대방에게 보내 줘 💌", "success");
+        await navigator.clipboard.writeText(roomCode);
+        notice("초대 코드를 복사했어! 다은이에게 보내 줘 💌", "success");
       } catch {
-        showNotice("초대 코드: " + currentRoomCode, "info");
+        notice("초대 코드: " + roomCode, "info");
       }
     }
 
     function leaveRoomOnThisDevice() {
-      if (!confirm("이 기기에서만 커플 방 연결을 해제할까? 방과 답변 데이터는 삭제되지 않아.")) return;
+      if (!confirm("이 기기에서만 방 연결을 해제할까? 방과 게임 기록은 삭제되지 않아.")) {
+        return;
+      }
 
       stopPolling();
-      currentRoomId = null;
-      currentRoomCode = null;
-      currentGameState = null;
+      roomId = null;
+      roomCode = null;
+      state = null;
+      selectedAnswer = null;
+
       localStorage.removeItem("couple_game_room_id");
       localStorage.removeItem("couple_game_room_code");
-      showOnly("roomCard");
-      showNotice("이 기기에서 방 연결을 해제했어. 기존 계정은 그대로 유지돼.", "info");
+
+      $("roomChip").textContent = "COUPLE GAME";
+      showScreen("roomScreen");
+      notice("이 기기의 방 연결을 해제했어.", "info");
     }
 
     async function startGame() {
-      if (busy || !currentRoomId) return;
-      hideNotice();
+      if (busy || !roomId) return;
+      clearNotice();
       setBusy(true);
 
       try {
         await ensureAuth();
+
         const { error } = await db.rpc("start_couple_game", {
-          p_couple_id: Number(currentRoomId)
+          p_couple_id: Number(roomId)
         });
+
         if (error) throw error;
-        await loadGameState(false, true);
+        selectedAnswer = null;
+        await refreshState();
       } catch (error) {
-        showNotice(getFriendlyError(error), "error");
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    async function submitAnswer() {
-      if (busy || !currentGameState?.session_id) return;
-
-      const answer = $("answerInput").value.trim();
-      if (!answer) {
-        showNotice("답변을 먼저 입력해 줘 💗", "error");
-        return;
-      }
-
-      hideNotice();
-      setBusy(true);
-
-      try {
-        const { error } = await db.rpc("submit_couple_answer", {
-          p_session_id: Number(currentGameState.session_id),
-          p_answer_text: answer
-        });
-        if (error) throw error;
-
-        $("answerInput").value = "";
-        showNotice("답변 제출 완료! 상대방의 답변을 기다리는 중이야 💌", "success");
-        await loadGameState(false, true);
-      } catch (error) {
-        showNotice(getFriendlyError(error), "error");
+        notice(friendlyError(error), "error");
       } finally {
         setBusy(false);
       }
     }
 
     async function nextQuestion() {
-      if (busy || !currentRoomId) return;
-      hideNotice();
+      if (busy || !roomId) return;
+      clearNotice();
       setBusy(true);
 
       try {
         const { error } = await db.rpc("start_couple_game", {
-          p_couple_id: Number(currentRoomId)
+          p_couple_id: Number(roomId)
         });
+
         if (error) throw error;
-        await loadGameState(false, true);
+
+        selectedAnswer = null;
+        await refreshState();
       } catch (error) {
-        showNotice(getFriendlyError(error), "error");
+        notice(friendlyError(error), "error");
       } finally {
         setBusy(false);
       }
     }
 
-    async function startGameStateRefresh() {
-      await loadGameState(false, true);
+    function backToLobby() {
+      if (state?.has_game) {
+        renderLobby(state);
+      } else {
+        showScreen("lobbyScreen");
+      }
     }
 
-    async function loadGameState(startNext = false, resetPolling = false) {
-      if (!currentRoomId || !currentUser) return;
+    function getMembers() {
+      return Array.isArray(state?.members) ? state.members : [];
+    }
+
+    function getMe() {
+      return getMembers().find(member => member.is_me) || null;
+    }
+
+    function getPartner() {
+      return getMembers().find(member => !member.is_me) || null;
+    }
+
+    function renderLobby(currentState) {
+      showScreen("lobbyScreen");
+      $("roomCode").textContent = roomCode || "--------";
+
+      const members = Array.isArray(currentState?.members)
+        ? currentState.members : [];
+
+      const me = members.find(member => member.is_me);
+      const partner = members.find(member => !member.is_me);
+
+      $("lobbyPlayers").innerHTML = `
+        <div class="player">
+          <div class="avatar">🐰</div>
+          <div class="player-name">${escapeHtml(me?.nickname || currentNickname || "나")}</div>
+          <div class="player-status">나의 자리</div>
+        </div>
+        <div class="vs">VS</div>
+        <div class="player partner">
+          <div class="avatar">🐻</div>
+          <div class="player-name">${escapeHtml(partner?.nickname || "상대방")}</div>
+          <div class="player-status">${partner ? "참여 완료 💕" : "참여 대기 중"}</div>
+        </div>
+      `;
+
+      $("startBtn").disabled = busy || members.length !== 2;
+      startPolling();
+    }
+
+    async function submitAnswer() {
+      if (busy || !state?.session_id) return;
+
+      if (!selectedAnswer) {
+        notice("먼저 마음에 드는 선택지를 눌러 줘 💗", "error");
+        return;
+      }
+
+      clearNotice();
+      setBusy(true);
+
+      try {
+        const { error } = await db.rpc("submit_couple_answer", {
+          p_session_id: Number(state.session_id),
+          p_answer_text: selectedAnswer
+        });
+
+        if (error) throw error;
+
+        selectedAnswer = null;
+        await refreshState();
+        notice("선택 완료! 상대방의 답을 기다려 보자 🤫", "success");
+      } catch (error) {
+        notice(friendlyError(error), "error");
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    function chooseAnswer(type) {
+      if (!state || state.my_answer !== null && state.my_answer !== undefined) return;
+
+      const me = getMe();
+      const partner = getPartner();
+
+      if (!me || !partner) {
+        notice("상대방도 방에 들어와야 선택할 수 있어.", "error");
+        return;
+      }
+
+      if (type === "me") {
+        selectedAnswer = "person:" + me.user_id;
+      } else if (type === "partner") {
+        selectedAnswer = "person:" + partner.user_id;
+      } else {
+        selectedAnswer = "both";
+      }
+
+      renderChoices();
+    }
+
+    function renderChoices() {
+      const me = getMe();
+      const partner = getPartner();
+
+      const options = [
+        { type: "me", value: me ? "person:" + me.user_id : "", label: "나", icon: "🐰", hint: "내가 더 그래!" },
+        { type: "partner", value: partner ? "person:" + partner.user_id : "", label: partner?.nickname || "상대방", icon: "🐻", hint: "네가 더 그래!" },
+        { type: "both", value: "both", label: "둘 다!", icon: "💞", hint: "우리 똑같아!" }
+      ];
+
+      $("choices").innerHTML = options.map(option => `
+        <button
+          type="button"
+          class="choice ${selectedAnswer === option.value ? "selected" : ""}"
+          onclick="chooseAnswer('${option.type}')"
+          ${state?.my_answer !== null && state?.my_answer !== undefined ? "disabled" : ""}
+        >
+          <span class="choice-icon">${option.icon}</span>
+          <span class="choice-name">${escapeHtml(option.label)}</span>
+          <span class="choice-hint">${option.hint}</span>
+        </button>
+      `).join("");
+
+      $("submitBtn").disabled =
+        busy ||
+        !selectedAnswer ||
+        (state?.my_answer !== null && state?.my_answer !== undefined);
+    }
+
+    async function refreshState() {
+      if (!roomId || !currentUser) return;
 
       try {
         const { data, error } = await db.rpc("get_couple_game_state", {
-          p_couple_id: Number(currentRoomId)
+          p_couple_id: Number(roomId)
         });
+
         if (error) throw error;
 
-        const state = typeof data === "string" ? JSON.parse(data) : data;
+        const result = typeof data === "string" ? JSON.parse(data) : data;
+        state = result;
 
-        if (!state.has_game) {
-          currentGameState = null;
-          showLobby();
-          $("memberInfo").textContent = "아직 시작된 질문이 없어. '질문 시작하기'를 눌러 줘.";
-          stopPolling();
+        if (!result.has_game) {
+          renderLobby(result);
           return;
         }
 
-        currentGameState = state;
-        renderStatuses(state);
+        renderStatusRows();
 
-        if (state.status === "revealed" && Array.isArray(state.answers) && state.answers.length >= 2) {
-          renderResults(state);
-          startPolling();
-          return;
-        }
-
-        if (state.my_answer !== null && state.my_answer !== undefined) {
-          showWaiting(state);
+        if (result.status === "revealed" &&
+            Array.isArray(result.answers) &&
+            result.answers.length >= 2) {
+          renderResults(result);
+        } else if (result.my_answer !== null &&
+                   result.my_answer !== undefined) {
+          renderWaiting(result);
         } else {
-          showQuestion(state);
+          renderQuestion(result);
         }
 
         startPolling();
       } catch (error) {
         console.error(error);
-        if (resetPolling) showNotice(getFriendlyError(error), "error");
+        notice(friendlyError(error), "error");
       }
     }
 
-    function renderStatuses(state) {
-      const members = Array.isArray(state.members) ? state.members : [];
+    function renderQuestion(currentState) {
+      showScreen("gameScreen");
+
+      $("questionText").textContent = currentState.question || "질문을 불러오지 못했어.";
+      $("questionNumber").textContent =
+        "QUESTION " + String((currentState.rounds_played || 0) + 1).padStart(2, "0");
+
+      updateScoreboard(currentState);
+      renderChoices();
+      renderStatusRows();
+    }
+
+    function renderWaiting(currentState) {
+      showScreen("waitingScreen");
+      updateScoreboard(currentState);
+      $("waitingScore").textContent = currentState.match_points || 0;
+      $("waitingRoundCaption").textContent =
+        (currentState.rounds_played || 0) + "문제 완료";
+      renderStatusRows();
+    }
+
+    function renderStatusRows() {
+      const members = getMembers();
 
       const html = members.map(member => {
-        const submitted = member.submitted === true;
-        const name = escapeHtml(member.nickname || "익명");
-        const icon = submitted ? "✅" : "⏳";
-        const status = submitted ? "답변 완료" : "답변 대기 중";
-        const cls = submitted ? "done" : "pending";
-
+        const done = member.submitted === true;
         return `
           <div class="status-row">
-            <div class="status-icon">${icon}</div>
-            <div class="status-name">${name}${member.is_me ? " (나)" : ""}</div>
-            <div class="status-text ${cls}">${status}</div>
+            <div class="status-avatar">${done ? "✅" : "⏳"}</div>
+            <div class="status-name">
+              ${escapeHtml(member.nickname || "익명")}${member.is_me ? " (나)" : ""}
+            </div>
+            <div class="status-text ${done ? "done" : "pending"}">
+              ${done ? "답변 완료" : "답변 대기 중"}
+            </div>
           </div>
         `;
       }).join("");
 
-      const fallback = '<div class="small">참여자 상태를 불러오는 중이야.</div>';
-      $("questionStatusRows").innerHTML = html || fallback;
-      $("waitingStatusRows").innerHTML = html || fallback;
+      const fallback = '<div class="muted">참여자를 확인하는 중이야.</div>';
+
+      if ($("gameStatusRows")) $("gameStatusRows").innerHTML = html || fallback;
+      if ($("waitingStatusRows")) $("waitingStatusRows").innerHTML = html || fallback;
     }
 
-    function showQuestion(state) {
-      showOnly("questionCard");
-      $("questionText").textContent = state.question || "질문을 불러오지 못했어.";
-      $("answerInput").disabled = false;
-      $("submitBtn").disabled = false;
+    function updateScoreboard(currentState) {
+      const points = currentState.match_points || 0;
+      const rounds = currentState.rounds_played || 0;
+
+      $("scoreValue").textContent = points;
+      $("waitingScore").textContent = points;
+      $("progressText").textContent = rounds + "문제 완료";
+      $("roundCaption").textContent = rounds === 0
+        ? "첫 번째 질문에 도전해 봐!"
+        : rounds + "번의 결과를 모았어 💕";
+
+      // 점수는 36개 질문을 기준으로 표시
+      $("progressFill").style.width = Math.min(100, rounds / 36 * 100) + "%";
     }
 
-    function showWaiting(state) {
-      showOnly("waitingCard");
-      renderStatuses(state);
+    function describeAnswer(answerText, memberList) {
+      if (answerText === "both") return "둘 다! 💞";
+
+      if (answerText && answerText.startsWith("person:")) {
+        const userId = answerText.slice(7);
+        const member = memberList.find(item => item.user_id === userId);
+        return member ? member.nickname : "선택한 사람";
+      }
+
+      return "선택 정보 없음";
     }
 
-    function renderResults(state) {
-      showOnly("resultCard");
-      $("resultQuestion").textContent = state.question || "";
+    function renderResults(currentState) {
+      showScreen("resultScreen");
 
-      const answers = Array.isArray(state.answers) ? state.answers : [];
-      $("resultAnswers").innerHTML = answers.map(item => `
-        <div class="result-item">
-          <div class="result-name">${escapeHtml(item.nickname || "익명")}${item.is_me ? " (나)" : ""}</div>
-          <div class="result-answer">${escapeHtml(item.answer_text || "(답변 없음)")}</div>
+      const answers = Array.isArray(currentState.answers)
+        ? currentState.answers : [];
+
+      const matched = answers.length >= 2 &&
+        answers[0].answer_text === answers[1].answer_text;
+
+      $("resultEmoji").textContent = matched ? "💖" : "🙈";
+      $("resultHeadline").textContent = matched ? "찰떡궁합!" : "앗, 생각이 달랐어!";
+      $("resultDescription").textContent = matched
+        ? "두 사람이 같은 답을 골랐어! 케미 점수 +1점 ✨"
+        : "서로 다른 답을 골랐네. 다음 질문에서 다시 도전!";
+      $("resultQuestion").textContent = currentState.question || "";
+      $("resultQuestionNumber").textContent =
+        "ROUND " + (currentState.rounds_played || 1) + " RESULT";
+
+      $("resultAnswers").innerHTML = answers.map(answer => `
+        <div class="answer-card">
+          <div class="answer-person">
+            ${escapeHtml(answer.nickname || "익명")}${answer.is_me ? " (나)" : ""}
+          </div>
+          <div class="answer-value">
+            ${escapeHtml(describeAnswer(answer.answer_text, getMembers()))}
+          </div>
         </div>
       `).join("");
 
-      $("nextBtn").disabled = false;
+      $("resultScore").textContent = currentState.match_points || 0;
+      $("resultRoundCaption").textContent =
+        (currentState.rounds_played || 0) + "문제 완료";
+      $("nextBtn").disabled = busy;
     }
 
     function escapeHtml(value) {
@@ -766,9 +1278,10 @@
 
     function startPolling() {
       if (pollTimer) return;
+
       pollTimer = setInterval(() => {
-        if (!busy && currentRoomId && currentUser) {
-          loadGameState(false, false);
+        if (!busy && roomId && currentUser && !changingScreen) {
+          refreshState();
         }
       }, 3000);
     }
@@ -781,35 +1294,34 @@
     }
 
     async function initialize() {
-      const savedNickname = localStorage.getItem("couple_game_nickname");
-      if (savedNickname) {
-        $("nickname").value = savedNickname;
-        currentNickname = savedNickname;
+      const savedName = localStorage.getItem("couple_game_nickname");
+
+      if (savedName) {
+        $("nickname").value = savedName;
+        currentNickname = savedName;
       }
 
       const { data, error } = await db.auth.getSession();
+
       if (error) {
-        showNotice("로그인 상태를 확인하지 못했어. 페이지를 새로고침해 줘.", "error");
+        notice("로그인 상태를 확인하지 못했어. 페이지를 새로고침해 줘.", "error");
         return;
       }
 
       if (data.session?.user) {
         currentUser = data.session.user;
-        const metadataName = currentUser.user_metadata?.nickname;
-        if (!savedNickname && metadataName) {
-          $("nickname").value = metadataName;
-          currentNickname = metadataName;
+
+        if (!savedName && currentUser.user_metadata?.nickname) {
+          currentNickname = currentUser.user_metadata.nickname;
+          $("nickname").value = currentNickname;
         }
       }
 
-      if (currentRoomId) {
-        if (currentUser) {
-          await restoreRoom();
-        } else {
-          showOnly("profileCard");
-        }
+      if (roomId && currentUser) {
+        saveRoom();
+        await refreshState();
       } else {
-        showOnly("profileCard");
+        showScreen("profileScreen");
       }
     }
 
