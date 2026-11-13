@@ -9,21 +9,85 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--pink:#ef78a4;--pink2:#d9578a;--purple:#9b87df;--ink:#403447;--muted:#93869a;--line:#f0dce7;--bg:#fff8fb;--green:#27835c;--shadow:0 12px 32px #9f648014}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:env(safe-area-inset-top) 15px calc(28px + env(safe-area-inset-bottom));font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 4% 4%,#ffe5ef 0,transparent 34%),radial-gradient(ellipse at 96% 20%,#eee8ff 0,transparent 30%),var(--bg)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;padding:env(safe-area-inset-top) 15px calc(28px + env(safe-area-inset-bottom));font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 4% 4%,#ffe5ef 0,transparent 34%),radial-gradient(ellipse at 96% 20%,#eee8ff 0,transparent 30%),var(--bg)}
 button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.48;cursor:not-allowed}
-.app{max-width:520px;margin:auto}.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 2px 16px;gap:10px}.brand{display:flex;align-items:center;gap:9px;font-weight:950;letter-spacing:-.5px}.brand-icon{width:38px;height:38px;display:grid;place-items:center;background:white;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);font-size:20px}.top-actions{display:flex;align-items:center;gap:7px}.chip{border:1px solid var(--line);background:#fff;padding:8px 11px;border-radius:99px;color:#8d7894;font-size:11px;font-weight:850;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hero{text-align:center;padding:8px 8px 22px}.hero-art{width:150px;height:150px;margin:0 auto 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:38px;background:linear-gradient(145deg,#ffe3ef,#eee7ff);box-shadow:0 10px 26px #d4a2c32b;font-size:34px;line-height:1;white-space:nowrap;overflow:hidden;transform:rotate(-2deg)}.hero-art span{display:block;line-height:1;flex:0 0 auto}h1{font-size:clamp(29px,7.8vw,38px);letter-spacing:-1.5px;line-height:1.2;margin:0 0 8px}.subtitle{color:var(--muted);font-size:13px;line-height:1.7}
-.card{background:#ffffffed;border:1px solid var(--line);border-radius:24px;padding:21px;margin-bottom:14px;box-shadow:var(--shadow)}.hidden{display:none!important}h2{font-size:21px;letter-spacing:-.6px;margin:0 0 8px}.muted{color:var(--muted);font-size:13px;line-height:1.7}.eyebrow{display:inline-block;padding:7px 10px;border-radius:99px;background:#f1ebff;color:#8068b9;font-size:10px;font-weight:950;letter-spacing:.7px;margin-bottom:12px}
-.label{display:block;margin:17px 0 8px;font-size:12px;font-weight:900}input{width:100%;padding:14px;color:var(--ink);background:#fffafd;border:1px solid #ead9e7;border-radius:14px;outline:none}input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
-.btn{width:100%;border:0;border-radius:15px;padding:15px;margin-top:10px;font-weight:900;font-size:14px;color:white;background:linear-gradient(120deg,var(--pink),var(--pink2));box-shadow:0 7px 17px #ed5f9125}.btn:active{transform:scale(.99)}.btn.secondary{background:#f0eaff;color:#765db6;box-shadow:none}.btn.soft{background:#fff0f6;color:#a54d76;box-shadow:none}.btn.ghost{background:white;color:#8d7894;border:1px solid var(--line);box-shadow:none}
-.notice{display:none;margin:0 0 13px;border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.6;overflow-wrap:anywhere}.notice.show{display:block}.notice.error{background:#ffe8ef;color:#a33459}.notice.success{background:#e6f8ed;color:#226b4a}.notice.info{background:#f0eaff;color:#6d56a7}
-.account-list{display:grid;gap:9px;margin-top:15px}.account-row{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid var(--line);border-radius:17px;background:#fffafd}.avatar{width:44px;height:44px;display:grid;place-items:center;flex-shrink:0;border-radius:15px;background:#fff0f6;font-size:24px}.account-meta{flex:1;min-width:0}.account-name{font-size:14px;font-weight:950;overflow-wrap:anywhere}.account-sub{font-size:10px;color:var(--muted);margin-top:4px}.account-actions{display:flex;gap:6px}.mini{border:1px solid var(--line);background:white;border-radius:11px;padding:8px 9px;color:#8d7894;font-size:11px;font-weight:850}
-.separator{display:flex;align-items:center;gap:12px;margin:20px 0;color:#b8a8ba;font-size:11px;font-weight:900}.separator:before,.separator:after{content:"";flex:1;height:1px;background:var(--line)}
-.room-code{margin:15px 0;padding:16px;border-radius:17px;background:#fff0f6;text-align:center;color:var(--pink2);font-size:28px;font-weight:1000;letter-spacing:4px;overflow-wrap:anywhere}.players{display:grid;grid-template-columns:1fr 32px 1fr;align-items:center;gap:8px;margin:18px 0}.player{text-align:center;padding:13px 5px;border-radius:18px;background:#fff5f9;border:1px solid #f7dfeb;min-width:0}.player.partner{background:#f7f3ff;border-color:#e7ddff}.player .avatar{margin:0 auto 8px;width:49px;height:49px;background:white}.player-name{font-size:12px;font-weight:900;overflow-wrap:anywhere}.player-status{margin-top:5px;font-size:10px;color:var(--muted);font-weight:800}.vs{text-align:center;font-size:12px;color:var(--pink2);font-weight:1000}
-.scoreboard{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 15px;background:linear-gradient(120deg,#fff0f6,#f3edff);border-radius:18px;margin:13px 0 18px}.score-label{font-size:12px;font-weight:900}.score-value{font-size:24px;font-weight:1000;color:#d75b91;white-space:nowrap}.progress-line{height:7px;overflow:hidden;background:#f1e6f0;border-radius:99px;margin:13px 0 7px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--purple));border-radius:inherit;transition:width .3s}.progress-caption{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:var(--muted);font-weight:800}
-.question-box{padding:19px 16px;border-radius:20px;background:linear-gradient(145deg,#fff0f6,#f3efff);margin:14px 0 16px}.question-number{color:#a27db5;font-size:11px;font-weight:1000;margin-bottom:9px}.question-text{font-size:23px;font-weight:1000;letter-spacing:-.8px;line-height:1.45;overflow-wrap:anywhere}.choose-caption{margin:0 0 11px;color:var(--muted);font-size:12px;font-weight:800}.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.choice{min-height:108px;padding:12px 5px;border-radius:16px;background:white;border:1.5px solid var(--line);color:var(--ink);box-shadow:0 4px 12px #c89eb31a}.choice.selected{background:#fff0f6;border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa1d}.choice-icon{display:block;font-size:25px;margin-bottom:8px}.choice-name{display:block;font-size:12px;font-weight:1000;overflow-wrap:anywhere}.choice-hint{display:block;margin-top:4px;color:var(--muted);font-size:9px;line-height:1.4}
-.status-panel{margin:16px 0;padding:13px;border-radius:16px;background:#fffbfd;border:1px solid var(--line)}.status-title{font-size:12px;font-weight:1000;margin-bottom:7px}.status-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #f4e6ee}.status-row:last-child{border-bottom:0;padding-bottom:0}.status-avatar{width:29px;height:29px;display:grid;place-items:center;background:#f4efff;border-radius:10px;flex-shrink:0}.status-name{flex:1;font-size:12px;font-weight:900;overflow-wrap:anywhere}.status-text{font-size:10px;font-weight:1000;white-space:nowrap}.done{color:var(--green)}.pending{color:#a99aa9}
-.waiting{text-align:center;padding:12px 3px 6px}.waiting-art{font-size:43px;margin:5px 0 12px}.waiting-title{font-size:22px;font-weight:1000}.result-banner{text-align:center;padding:17px 12px;background:linear-gradient(145deg,#fff0f6,#f0eaff);border-radius:20px;margin:13px 0 18px}.result-emoji{font-size:40px}.result-match{font-size:23px;font-weight:1000;margin-top:8px}.answer-card{padding:13px;border-radius:15px;background:#fff9fc;border:1px solid var(--line);margin:9px 0}.answer-person{font-size:11px;color:var(--muted);font-weight:900;margin-bottom:6px}.answer-value{font-size:15px;font-weight:1000;overflow-wrap:anywhere}.footer{text-align:center;padding:14px 8px;color:#b2a0b1;font-size:10px;line-height:1.8}
+.app{max-width:520px;margin:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 2px 16px;gap:10px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:950;letter-spacing:-.5px}
+.brand-icon{width:38px;height:38px;display:grid;place-items:center;background:white;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);font-size:20px}
+.top-actions{display:flex;align-items:center;gap:7px}
+.chip{border:1px solid var(--line);background:#fff;padding:8px 11px;border-radius:99px;color:#8d7894;font-size:11px;font-weight:850;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero{text-align:center;padding:8px 8px 22px}
+.hero-art{width:150px;height:150px;margin:0 auto 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border-radius:38px;background:linear-gradient(145deg,#ffe3ef,#eee7ff);box-shadow:0 10px 26px #d4a2c32b;font-size:34px;line-height:1;white-space:nowrap;overflow:hidden;transform:rotate(-2deg)}
+.hero-art span{display:block;line-height:1;flex:0 0 auto}
+h1{font-size:clamp(29px,7.8vw,38px);letter-spacing:-1.5px;line-height:1.2;margin:0 0 8px}
+.subtitle{color:var(--muted);font-size:13px;line-height:1.7}
+.card{background:#ffffffed;border:1px solid var(--line);border-radius:24px;padding:21px;margin-bottom:14px;box-shadow:var(--shadow)}
+.hidden{display:none!important}
+h2{font-size:21px;letter-spacing:-.6px;margin:0 0 8px}
+.muted{color:var(--muted);font-size:13px;line-height:1.7}
+.eyebrow{display:inline-block;padding:7px 10px;border-radius:99px;background:#f1ebff;color:#8068b9;font-size:10px;font-weight:950;letter-spacing:.7px;margin-bottom:12px}
+.label{display:block;margin:17px 0 8px;font-size:12px;font-weight:900}
+input{width:100%;padding:14px;color:var(--ink);background:#fffafd;border:1px solid #ead9e7;border-radius:14px;outline:none}
+input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
+.btn{width:100%;border:0;border-radius:15px;padding:15px;margin-top:10px;font-weight:900;font-size:14px;color:white;background:linear-gradient(120deg,var(--pink),var(--pink2));box-shadow:0 7px 17px #ed5f9125}
+.btn:active{transform:scale(.99)}
+.btn.secondary{background:#f0eaff;color:#765db6;box-shadow:none}
+.btn.soft{background:#fff0f6;color:#a54d76;box-shadow:none}
+.btn.ghost{background:white;color:#8d7894;border:1px solid var(--line);box-shadow:none}
+.notice{display:none;margin:0 0 13px;border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.notice.show{display:block}.notice.error{background:#ffe8ef;color:#a33459}.notice.success{background:#e6f8ed;color:#226b4a}.notice.info{background:#f0eaff;color:#6d56a7}
+.account-list{display:grid;gap:9px;margin-top:15px}
+.account-row{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid var(--line);border-radius:17px;background:#fffafd}
+.avatar{width:44px;height:44px;display:grid;place-items:center;flex-shrink:0;border-radius:15px;background:#fff0f6;font-size:24px}
+.account-meta{flex:1;min-width:0}.account-name{font-size:14px;font-weight:950;overflow-wrap:anywhere}
+.account-sub{font-size:10px;color:var(--muted);margin-top:4px}
+.account-actions{display:flex;gap:6px}
+.mini{border:1px solid var(--line);background:white;border-radius:11px;padding:8px 9px;color:#8d7894;font-size:11px;font-weight:850}
+.separator{display:flex;align-items:center;gap:12px;margin:20px 0;color:#b8a8ba;font-size:11px;font-weight:900}
+.separator:before,.separator:after{content:"";flex:1;height:1px;background:var(--line)}
+.room-code{margin:15px 0;padding:16px;border-radius:17px;background:#fff0f6;text-align:center;color:var(--pink2);font-size:28px;font-weight:1000;letter-spacing:4px;overflow-wrap:anywhere}
+.players{display:grid;grid-template-columns:1fr 32px 1fr;align-items:center;gap:8px;margin:18px 0}
+.player{text-align:center;padding:13px 5px;border-radius:18px;background:#fff5f9;border:1px solid #f7dfeb;min-width:0}
+.player.partner{background:#f7f3ff;border-color:#e7ddff}
+.player .avatar{margin:0 auto 8px;width:49px;height:49px;background:white}
+.player-name{font-size:12px;font-weight:900;overflow-wrap:anywhere}
+.player-status{margin-top:5px;font-size:10px;color:var(--muted);font-weight:800}
+.vs{text-align:center;font-size:12px;color:var(--pink2);font-weight:1000}
+.scoreboard{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 15px;background:linear-gradient(120deg,#fff0f6,#f3edff);border-radius:18px;margin:13px 0 18px}
+.score-label{font-size:12px;font-weight:900}
+.score-value{font-size:24px;font-weight:1000;color:#d75b91;white-space:nowrap}
+.progress-line{height:7px;overflow:hidden;background:#f1e6f0;border-radius:99px;margin:13px 0 7px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--purple));border-radius:inherit;transition:width .3s}
+.progress-caption{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:var(--muted);font-weight:800}
+.question-box{padding:19px 16px;border-radius:20px;background:linear-gradient(145deg,#fff0f6,#f3efff);margin:14px 0 16px}
+.question-number{color:#a27db5;font-size:11px;font-weight:1000;margin-bottom:9px}
+.question-text{font-size:23px;font-weight:1000;letter-spacing:-.8px;line-height:1.45;overflow-wrap:anywhere}
+.choose-caption{margin:0 0 11px;color:var(--muted);font-size:12px;font-weight:800}
+.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.choice{min-height:108px;padding:12px 5px;border-radius:16px;background:white;border:1.5px solid var(--line);color:var(--ink);box-shadow:0 4px 12px #c89eb31a}
+.choice.selected{background:#fff0f6;border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa1d}
+.choice-icon{display:block;font-size:25px;margin-bottom:8px}
+.choice-name{display:block;font-size:12px;font-weight:1000;overflow-wrap:anywhere}
+.choice-hint{display:block;margin-top:4px;color:var(--muted);font-size:9px;line-height:1.4}
+.status-panel{margin:16px 0;padding:13px;border-radius:16px;background:#fffbfd;border:1px solid var(--line)}
+.status-title{font-size:12px;font-weight:1000;margin-bottom:7px}
+.status-row{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #f4e6ee}
+.status-row:last-child{border-bottom:0;padding-bottom:0}
+.status-avatar{width:29px;height:29px;display:grid;place-items:center;background:#f4efff;border-radius:10px;flex-shrink:0}
+.status-name{flex:1;font-size:12px;font-weight:900;overflow-wrap:anywhere}
+.status-text{font-size:10px;font-weight:1000;white-space:nowrap}
+.done{color:var(--green)}.pending{color:#a99aa9}
+.waiting{text-align:center;padding:12px 3px 6px}
+.waiting-art{font-size:43px;margin:5px 0 12px}
+.waiting-title{font-size:22px;font-weight:1000}
+.result-banner{text-align:center;padding:17px 12px;background:linear-gradient(145deg,#fff0f6,#f0eaff);border-radius:20px;margin:13px 0 18px}
+.result-emoji{font-size:40px}.result-match{font-size:23px;font-weight:1000;margin-top:8px}
+.answer-card{padding:13px;border-radius:15px;background:#fff9fc;border:1px solid var(--line);margin:9px 0}
+.answer-person{font-size:11px;color:var(--muted);font-weight:900;margin-bottom:6px}
+.answer-value{font-size:15px;font-weight:1000;overflow-wrap:anywhere}
+.footer{text-align:center;padding:14px 8px;color:#b2a0b1;font-size:10px;line-height:1.8}
 @media(max-width:370px){.card{padding:17px}.choices{gap:5px}.choice-name{font-size:11px}.question-text{font-size:21px}.account-actions{flex-direction:column}}
 </style>
 </head>
@@ -33,11 +97,13 @@ button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:tran
   <div class="brand"><div class="brand-icon">💗</div><span>우리 진짜 맞아?</span></div>
   <div class="top-actions"><span id="accountChip" class="chip">계정 선택</span><button id="switchBtn" class="mini hidden" type="button" onclick="showAccounts()">계정 전환</button></div>
 </header>
+
 <section class="hero">
   <div class="hero-art" aria-hidden="true"><span>🐰</span><span>💞🐻</span></div>
   <h1>우리 진짜<br>잘 맞을까?</h1>
   <div class="subtitle">둘이 선택하고, 결과를 공개하고!<br>우리의 케미를 확인해 보자 💕</div>
 </section>
+
 <div id="notice" class="notice" aria-live="polite"></div>
 
 <section id="accountScreen" class="card hidden">
@@ -87,9 +153,11 @@ button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:tran
 <section id="gameScreen" class="card hidden">
   <span class="eyebrow">ROUND BY ROUND 💕</span>
   <div class="scoreboard"><div><div class="score-label">💖 우리 커플의 케미 점수</div><div class="muted" id="roundCaption">첫 번째 질문에 도전해 봐!</div></div><div class="score-value"><span id="scoreValue">0</span>점</div></div>
-  <div class="progress-caption"><span>우리의 케미 여정</span><span id="progressText">0문제 완료</span></div><div class="progress-line"><div id="progressFill" class="progress-fill"></div></div>
+  <div class="progress-caption"><span>우리의 케미 여정</span><span id="progressText">0문제 완료</span></div>
+  <div class="progress-line"><div id="progressFill" class="progress-fill"></div></div>
   <div class="question-box"><div id="questionNumber" class="question-number">QUESTION 01</div><div id="questionText" class="question-text">질문을 불러오는 중...</div></div>
-  <p class="choose-caption">누구라고 생각해? 하나를 골라 봐 👇</p><div id="choices" class="choices"></div>
+  <p class="choose-caption">누구라고 생각해? 하나를 골라 봐 👇</p>
+  <div id="choices" class="choices"></div>
   <div class="status-panel"><div class="status-title">💌 답변 현황</div><div id="gameStatusRows"></div></div>
   <button class="btn" id="submitBtn" type="button" onclick="submitAnswer()">이 답으로 결정! 💘</button>
   <p class="muted" style="text-align:center">둘 다 제출하면 답변이 공개돼!</p>
@@ -104,7 +172,8 @@ button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:tran
 </section>
 
 <section id="resultScreen" class="card hidden">
-  <span class="eyebrow">ANSWER REVEALED ✨</span><h2>두 사람의 선택은... 👀</h2>
+  <span class="eyebrow">ANSWER REVEALED ✨</span>
+  <h2>두 사람의 선택은... 👀</h2>
   <div class="result-banner"><div id="resultEmoji" class="result-emoji">💞</div><div id="resultHeadline" class="result-match">결과 확인!</div><p id="resultDescription" class="muted"></p></div>
   <div class="question-box"><div id="resultQuestionNumber" class="question-number">ROUND RESULT</div><div id="resultQuestion" class="question-text"></div></div>
   <div id="resultAnswers"></div>
@@ -113,18 +182,22 @@ button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:tran
   <button class="btn secondary" type="button" onclick="backToLobby()">방으로 돌아가기</button>
   <button class="btn ghost" type="button" onclick="showAccounts()">계정 전환</button>
 </section>
+
 <footer class="footer">둘의 마음을 맞춰 가는 작은 게임 💗<br>MADE WITH LOVE</footer>
 </main>
 
 <script>
 (() => {
 "use strict";
+
 const SUPABASE_URL = "https://dcdattftbhwbpxzndeks.supabase.co";
 const SUPABASE_KEY = "sb_publishable_hp22uPBJ62LJjSBQe9q3rg_Km4d8zd9";
 const ACCOUNT_LIST_KEY = "couple_accounts_v2";
 const LEGACY_AUTH_KEY = "sb-dcdattftbhwbpxzndeks-auth-token";
+
 const $ = id => document.getElementById(id);
 const screens = ["accountScreen","profileScreen","roomScreen","lobbyScreen","gameScreen","waitingScreen","resultScreen"];
+
 let accounts = [];
 let activeAccountId = null;
 let db = null;
@@ -135,15 +208,50 @@ let roomCode = null;
 let state = null;
 let selectedAnswer = null;
 let pollTimer = null;
+let pollInFlight = false;
 let busy = false;
-let changingScreen = false;
+let activeScreenId = null;
 
-function notice(message,type="info"){ $("notice").textContent=message; $("notice").className="notice show "+type; }
-function clearNotice(){ $("notice").textContent=""; $("notice").className="notice"; }
-function showScreen(id){ screens.forEach(s=>$(s).classList.add("hidden")); $(id).classList.remove("hidden"); changingScreen=true; window.scrollTo({top:0,behavior:"smooth"}); changingScreen=false; }
-function setBusy(value){ busy=value; ["createAccountBtn","createRoomBtn","joinBtn","startBtn","submitBtn","nextBtn"].forEach(id=>{if($(id))$(id).disabled=value;}); }
-function readAccounts(){ try{const a=JSON.parse(localStorage.getItem(ACCOUNT_LIST_KEY)||"[]");return Array.isArray(a)?a:[];}catch{return[];} }
-function writeAccounts(){ localStorage.setItem(ACCOUNT_LIST_KEY,JSON.stringify(accounts)); }
+function notice(message,type="info"){
+  $("notice").textContent=message;
+  $("notice").className="notice show "+type;
+}
+function clearNotice(){
+  $("notice").textContent="";
+  $("notice").className="notice";
+}
+
+/* 화면이 실제로 바뀔 때만 스크롤을 맨 위로 이동 */
+function showScreen(id){
+  const screenChanged = activeScreenId !== id;
+
+  screens.forEach(s=>$(s).classList.add("hidden"));
+  $(id).classList.remove("hidden");
+
+  activeScreenId = id;
+
+  if(screenChanged){
+    window.scrollTo({top:0,behavior:"auto"});
+  }
+}
+
+function setBusy(value){
+  busy=value;
+  ["createAccountBtn","createRoomBtn","joinBtn","startBtn","submitBtn","nextBtn"].forEach(id=>{
+    if($(id))$(id).disabled=value;
+  });
+}
+
+function readAccounts(){
+  try{
+    const a=JSON.parse(localStorage.getItem(ACCOUNT_LIST_KEY)||"[]");
+    return Array.isArray(a)?a:[];
+  }catch{return[];}
+}
+function writeAccounts(){
+  localStorage.setItem(ACCOUNT_LIST_KEY,JSON.stringify(accounts));
+}
+
 function authStorage(accountId){
   const prefix="couple_auth_"+accountId+"_";
   return {
@@ -152,29 +260,81 @@ function authStorage(accountId){
     removeItem(key){localStorage.removeItem(prefix+key);}
   };
 }
+
 function createAccountClient(accountId){
   return window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
-    auth:{storage:authStorage(accountId),storageKey:"couple-auth-"+accountId,persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}
+    auth:{
+      storage:authStorage(accountId),
+      storageKey:"couple-auth-"+accountId,
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:false
+    }
   });
 }
-function roomStorageKey(){return "couple_room_"+activeAccountId;}
-function loadRoomForAccount(){
-  roomId=null;roomCode=null;
-  if(!activeAccountId)return;
-  try{const saved=JSON.parse(localStorage.getItem(roomStorageKey())||"null");if(saved){roomId=saved.roomId||null;roomCode=saved.roomCode||null;}}catch{}
+
+function roomStorageKey(){
+  return "couple_room_"+activeAccountId;
 }
+
+function loadRoomForAccount(){
+  roomId=null;
+  roomCode=null;
+  if(!activeAccountId)return;
+  try{
+    const saved=JSON.parse(localStorage.getItem(roomStorageKey())||"null");
+    if(saved){
+      roomId=saved.roomId||null;
+      roomCode=saved.roomCode||null;
+    }
+  }catch{}
+}
+
 function saveRoom(){
   if(!activeAccountId)return;
-  if(roomId)localStorage.setItem(roomStorageKey(),JSON.stringify({roomId,roomCode:roomCode||""}));
-  else localStorage.removeItem(roomStorageKey());
+  if(roomId){
+    localStorage.setItem(roomStorageKey(),JSON.stringify({roomId,roomCode:roomCode||""}));
+  }else{
+    localStorage.removeItem(roomStorageKey());
+  }
   $("accountChip").textContent=currentNickname||"계정";
 }
-function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
-function startPolling(){
-  if(pollTimer)clearInterval(pollTimer);
-  pollTimer=setInterval(()=>{if(!busy&&roomId&&currentUser&&!changingScreen)refreshState();},3000);
+
+function stopPolling(){
+  if(pollTimer){
+    clearInterval(pollTimer);
+    pollTimer=null;
+  }
+  pollInFlight=false;
 }
-function escapeHtml(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");}
+
+/* 이미 실행 중인 타이머가 있으면 새로 만들지 않음 */
+function startPolling(){
+  if(pollTimer)return;
+
+  pollTimer=setInterval(async()=>{
+    if(busy||!roomId||!currentUser||pollInFlight)return;
+
+    pollInFlight=true;
+    try{
+      await refreshState();
+    }catch(e){
+      console.error("자동 새로고침 오류:",e);
+    }finally{
+      pollInFlight=false;
+    }
+  },3000);
+}
+
+function escapeHtml(v){
+  return String(v??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
 function friendlyError(error){
   const m=error?.message||"알 수 없는 오류가 발생했어.";
   if(m.includes("이미 다른 방"))return "이 계정은 이미 다른 방에 참여 중이야. 이전 계정으로 이어가거나 새 사용자를 추가해 줘.";
@@ -185,41 +345,93 @@ function friendlyError(error){
   if(m.includes("모든 질문을 플레이"))return "준비된 질문을 모두 플레이했어! 새로운 질문이 필요해.";
   return m;
 }
+
 function renderAccounts(){
   const list=$("accountList");
-  if(!accounts.length){list.innerHTML='<div class="muted" style="padding:12px 2px">저장된 계정이 아직 없어. 새로운 사용자를 추가해 줘.</div>';return;}
+  if(!accounts.length){
+    list.innerHTML='<div class="muted" style="padding:12px 2px">저장된 계정이 아직 없어. 새로운 사용자를 추가해 줘.</div>';
+    return;
+  }
+
   list.innerHTML=accounts.map(a=>`
     <div class="account-row">
       <div class="avatar">${a.avatar||"🐰"}</div>
-      <div class="account-meta"><div class="account-name">${escapeHtml(a.nickname||"이름 없음")}</div><div class="account-sub">${a.id===activeAccountId?"현재 선택된 계정":"이 기기에 저장된 계정"}</div></div>
-      <div class="account-actions"><button class="mini" type="button" onclick="window.__couple.selectAccount('${a.id}')">접속</button><button class="mini" type="button" onclick="window.__couple.removeAccount('${a.id}')">삭제</button></div>
-    </div>`).join("");
+      <div class="account-meta">
+        <div class="account-name">${escapeHtml(a.nickname||"이름 없음")}</div>
+        <div class="account-sub">${a.id===activeAccountId?"현재 선택된 계정":"이 기기에 저장된 계정"}</div>
+      </div>
+      <div class="account-actions">
+        <button class="mini" type="button" onclick="window.__couple.selectAccount('${a.id}')">접속</button>
+        <button class="mini" type="button" onclick="window.__couple.removeAccount('${a.id}')">삭제</button>
+      </div>
+    </div>
+  `).join("");
 }
+
 function showAccounts(){
-  stopPolling();selectedAnswer=null;state=null;roomId=null;roomCode=null;currentUser=null;db=null;activeAccountId=null;currentNickname="";
-  $("accountChip").textContent="계정 선택";$("switchBtn").classList.add("hidden");
-  renderAccounts();showScreen("accountScreen");clearNotice();
+  stopPolling();
+  selectedAnswer=null;
+  state=null;
+  roomId=null;
+  roomCode=null;
+  currentUser=null;
+  db=null;
+  activeAccountId=null;
+  currentNickname="";
+  $("accountChip").textContent="계정 선택";
+  $("switchBtn").classList.add("hidden");
+  renderAccounts();
+  showScreen("accountScreen");
+  clearNotice();
 }
-function showNewAccount(){clearNotice();$("nickname").value="";showScreen("profileScreen");}
+
+function showNewAccount(){
+  clearNotice();
+  $("nickname").value="";
+  showScreen("profileScreen");
+}
+
 async function migrateLegacySession(){
   if(accounts.length)return;
+
   const legacyRaw=localStorage.getItem(LEGACY_AUTH_KEY);
   if(!legacyRaw)return;
+
   let legacy;
   try{legacy=JSON.parse(legacyRaw);}catch{return;}
+
   if(!legacy?.access_token||!legacy?.refresh_token)return;
+
   const id=crypto.randomUUID();
   const nickname=legacy.user?.user_metadata?.nickname||"기존 사용자";
   const client=createAccountClient(id);
-  const {data,error}=await client.auth.setSession({access_token:legacy.access_token,refresh_token:legacy.refresh_token});
+
+  const {data,error}=await client.auth.setSession({
+    access_token:legacy.access_token,
+    refresh_token:legacy.refresh_token
+  });
+
   if(error||!data?.user)return;
-  accounts.push({id,nickname,avatar:"🐰",createdAt:new Date().toISOString(),lastUsedAt:new Date().toISOString()});
+
+  accounts.push({
+    id,
+    nickname,
+    avatar:"🐰",
+    createdAt:new Date().toISOString(),
+    lastUsedAt:new Date().toISOString()
+  });
   writeAccounts();
-  // Migrate the previous single-account room shortcut into this account's own slot.
+
   const oldRoomId=localStorage.getItem("couple_game_room_id");
   const oldRoomCode=localStorage.getItem("couple_game_room_code");
-  if(oldRoomId){localStorage.setItem("couple_room_"+id,JSON.stringify({roomId:oldRoomId,roomCode:oldRoomCode||""}));}
-  // Keep the old key until the new namespaced session is verified.
+
+  if(oldRoomId){
+    localStorage.setItem("couple_room_"+id,JSON.stringify({
+      roomId:oldRoomId,
+      roomCode:oldRoomCode||""
+    }));
+  }
+
   const check=await client.auth.getSession();
   if(check.data?.session){
     localStorage.removeItem(LEGACY_AUTH_KEY);
@@ -227,182 +439,485 @@ async function migrateLegacySession(){
     localStorage.removeItem("couple_game_room_code");
   }
 }
+
 async function createAccount(){
-  if(busy)return;clearNotice();const name=$("nickname").value.trim();
-  if(!name){notice("이름을 입력해 줘.","error");return;}
-  if(name.length>20){notice("이름은 20자 이하로 입력해 줘.","error");return;}
+  if(busy)return;
+  clearNotice();
+
+  const name=$("nickname").value.trim();
+  if(!name){
+    notice("이름을 입력해 줘.","error");
+    return;
+  }
+  if(name.length>20){
+    notice("이름은 20자 이하로 입력해 줘.","error");
+    return;
+  }
+
   setBusy(true);
   try{
-    const id=crypto.randomUUID();const client=createAccountClient(id);
-    const {data,error}=await client.auth.signInAnonymously({options:{data:{nickname:name}}});
-    if(error)throw error;if(!data.user)throw new Error("새 계정을 만들지 못했어.");
-    accounts.push({id,nickname:name,avatar:accounts.length%2===0?"🐰":"🐻",createdAt:new Date().toISOString(),lastUsedAt:new Date().toISOString()});
+    const id=crypto.randomUUID();
+    const client=createAccountClient(id);
+    const {data,error}=await client.auth.signInAnonymously({
+      options:{data:{nickname:name}}
+    });
+
+    if(error)throw error;
+    if(!data.user)throw new Error("새 계정을 만들지 못했어.");
+
+    accounts.push({
+      id,
+      nickname:name,
+      avatar:accounts.length%2===0?"🐰":"🐻",
+      createdAt:new Date().toISOString(),
+      lastUsedAt:new Date().toISOString()
+    });
     writeAccounts();
+
     await activateAccount(id,client);
     notice("새 사용자 계정이 만들어졌어! 💗","success");
-  }catch(e){notice(friendlyError(e),"error");}
-  finally{setBusy(false);}
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }finally{
+    setBusy(false);
+  }
 }
+
 async function activateAccount(id,existingClient=null){
-  stopPolling();clearNotice();
-  const account=accounts.find(a=>a.id===id);if(!account)throw new Error("저장된 계정을 찾을 수 없어.");
+  stopPolling();
+  clearNotice();
+
+  const account=accounts.find(a=>a.id===id);
+  if(!account)throw new Error("저장된 계정을 찾을 수 없어.");
+
   const client=existingClient||createAccountClient(id);
   const {data,error}=await client.auth.getSession();
+
   if(error)throw error;
-  if(!data.session?.user)throw new Error("이 계정의 로그인 세션을 찾을 수 없어. 계정을 다시 만들거나 브라우저 저장공간을 확인해 줘.");
-  db=client;activeAccountId=id;currentUser=data.session.user;
+  if(!data.session?.user){
+    throw new Error("이 계정의 로그인 세션을 찾을 수 없어. 계정을 다시 만들거나 브라우저 저장공간을 확인해 줘.");
+  }
+
+  db=client;
+  activeAccountId=id;
+  currentUser=data.session.user;
   currentNickname=account.nickname||currentUser.user_metadata?.nickname||"익명";
-  account.lastUsedAt=new Date().toISOString();writeAccounts();
-  loadRoomForAccount();$("accountChip").textContent=currentNickname;$("switchBtn").classList.remove("hidden");
+
+  account.lastUsedAt=new Date().toISOString();
+  writeAccounts();
+
+  loadRoomForAccount();
+  $("accountChip").textContent=currentNickname;
+  $("switchBtn").classList.remove("hidden");
+
   if(roomId){
-    try{await refreshState();}catch(e){notice("저장된 방을 불러오지 못했어: "+friendlyError(e),"error");showScreen("roomScreen");}
-  }else showScreen("roomScreen");
+    try{
+      await refreshState();
+    }catch(e){
+      notice("저장된 방을 불러오지 못했어: "+friendlyError(e),"error");
+      showScreen("roomScreen");
+    }
+  }else{
+    showScreen("roomScreen");
+  }
 }
+
 async function selectAccount(id){
-  try{await activateAccount(id);notice("계정을 전환했어. 💗","success");}
-  catch(e){notice(friendlyError(e),"error");}
+  try{
+    await activateAccount(id);
+    notice("계정을 전환했어. 💗","success");
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }
 }
+
 async function removeAccount(id){
-  const account=accounts.find(a=>a.id===id);if(!account)return;
+  const account=accounts.find(a=>a.id===id);
+  if(!account)return;
+
   if(!confirm(`'${account.nickname}' 계정을 이 기기에서 제거할까?\n서버의 방과 게임 기록은 삭제되지 않아. 단, 익명 계정은 다시 로그인하지 못할 수 있어.`))return;
+
   const prefix="couple_auth_"+id+"_";
-  Object.keys(localStorage).filter(k=>k.startsWith(prefix)).forEach(k=>localStorage.removeItem(k));
+  Object.keys(localStorage)
+    .filter(k=>k.startsWith(prefix))
+    .forEach(k=>localStorage.removeItem(k));
+
   localStorage.removeItem("couple_room_"+id);
-  accounts=accounts.filter(a=>a.id!==id);writeAccounts();
-  if(activeAccountId===id)showAccounts();else renderAccounts();
+  accounts=accounts.filter(a=>a.id!==id);
+  writeAccounts();
+
+  if(activeAccountId===id)showAccounts();
+  else renderAccounts();
 }
-async function updateNickname(name){
-  const {data,error}=await db.auth.updateUser({data:{nickname:name}});
-  if(error)throw error;currentUser=data.user;currentNickname=name;
-  const a=accounts.find(x=>x.id===activeAccountId);if(a){a.nickname=name;writeAccounts();}
-  $("accountChip").textContent=name;
-}
+
 async function ensureReady(){
   if(!db||!currentUser)throw new Error("먼저 계정을 선택해 줘.");
-  const {data,error}=await db.auth.getSession();if(error)throw error;
+
+  const {data,error}=await db.auth.getSession();
+  if(error)throw error;
   if(!data.session)throw new Error("로그인 세션이 만료됐어. 계정을 다시 선택해 줘.");
+
   return currentUser;
 }
+
 async function createRoom(){
-  if(busy)return;clearNotice();setBusy(true);
+  if(busy)return;
+  clearNotice();
+  setBusy(true);
+
   try{
     await ensureReady();
-    const {data,error}=await db.rpc("create_couple_room");if(error)throw error;
+    const {data,error}=await db.rpc("create_couple_room");
+    if(error)throw error;
+
     const result=typeof data==="string"?JSON.parse(data):data;
-    roomId=String(result.couple_id);roomCode=result.invite_code;saveRoom();
-    await refreshState();notice("우리만의 게임방이 만들어졌어! 💗","success");
-  }catch(e){notice(friendlyError(e),"error");}
-  finally{setBusy(false);}
+    roomId=String(result.couple_id);
+    roomCode=result.invite_code;
+    saveRoom();
+
+    await refreshState();
+    notice("우리만의 게임방이 만들어졌어! 💗","success");
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }finally{
+    setBusy(false);
+  }
 }
+
 async function joinRoom(){
-  if(busy)return;clearNotice();setBusy(true);
+  if(busy)return;
+  clearNotice();
+  setBusy(true);
+
   try{
-    await ensureReady();const code=$("inviteCode").value.trim().toUpperCase();
+    await ensureReady();
+
+    const code=$("inviteCode").value.trim().toUpperCase();
     if(!code)throw new Error("초대 코드를 입력해 줘.");
-    const {data,error}=await db.rpc("join_couple_room",{p_code:code});if(error)throw error;
+
+    const {data,error}=await db.rpc("join_couple_room",{p_code:code});
+    if(error)throw error;
+
     const result=typeof data==="string"?JSON.parse(data):data;
-    roomId=String(result.couple_id);roomCode=result.invite_code||code;saveRoom();
-    await refreshState();notice("커플 방에 들어왔어! 💕","success");
-  }catch(e){notice(friendlyError(e),"error");}
-  finally{setBusy(false);}
+    roomId=String(result.couple_id);
+    roomCode=result.invite_code||code;
+    saveRoom();
+
+    await refreshState();
+    notice("커플 방에 들어왔어! 💕","success");
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }finally{
+    setBusy(false);
+  }
 }
+
 async function copyRoomCode(){
   if(!roomCode)return;
-  try{await navigator.clipboard.writeText(roomCode);notice("초대 코드를 복사했어! 상대방에게 보내 줘 💌","success");}
-  catch{notice("초대 코드: "+roomCode,"info");}
+
+  try{
+    await navigator.clipboard.writeText(roomCode);
+    notice("초대 코드를 복사했어! 상대방에게 보내 줘 💌","success");
+  }catch{
+    notice("초대 코드: "+roomCode,"info");
+  }
 }
+
 function disconnectThisDevice(){
   if(!confirm("이 기기의 방 바로가기를 지울까?\n서버의 참여 기록과 게임 기록은 삭제되지 않아. 같은 계정으로 다시 방에 들어갈 수 있어."))return;
-  stopPolling();roomId=null;roomCode=null;state=null;selectedAnswer=null;saveRoom();showScreen("roomScreen");notice("이 기기의 방 바로가기를 해제했어. 서버 기록은 보존돼.","info");
+
+  stopPolling();
+  roomId=null;
+  roomCode=null;
+  state=null;
+  selectedAnswer=null;
+  saveRoom();
+  showScreen("roomScreen");
+  notice("이 기기의 방 바로가기를 해제했어. 서버 기록은 보존돼.","info");
 }
+
 async function startGame(){
-  if(busy||!roomId)return;clearNotice();setBusy(true);
-  try{await ensureReady();const {error}=await db.rpc("start_couple_game",{p_couple_id:Number(roomId)});if(error)throw error;selectedAnswer=null;await refreshState();}
-  catch(e){notice(friendlyError(e),"error");}finally{setBusy(false);}
+  if(busy||!roomId)return;
+
+  clearNotice();
+  setBusy(true);
+
+  try{
+    await ensureReady();
+    const {error}=await db.rpc("start_couple_game",{p_couple_id:Number(roomId)});
+    if(error)throw error;
+
+    selectedAnswer=null;
+    await refreshState();
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }finally{
+    setBusy(false);
+  }
 }
-async function nextQuestion(){await startGame();}
-function getMembers(){return Array.isArray(state?.members)?state.members:[];}
-function getMe(){return getMembers().find(m=>m.is_me)||null;}
-function getPartner(){return getMembers().find(m=>!m.is_me)||null;}
+
+async function nextQuestion(){
+  await startGame();
+}
+
+function getMembers(){
+  return Array.isArray(state?.members)?state.members:[];
+}
+function getMe(){
+  return getMembers().find(m=>m.is_me)||null;
+}
+function getPartner(){
+  return getMembers().find(m=>!m.is_me)||null;
+}
+
 function renderLobby(s){
-  showScreen("lobbyScreen");$("roomCode").textContent=roomCode||"--------";
-  const members=Array.isArray(s?.members)?s.members:[];const me=members.find(m=>m.is_me);const partner=members.find(m=>!m.is_me);
-  $("lobbyPlayers").innerHTML=`<div class="player"><div class="avatar">🐰</div><div class="player-name">${escapeHtml(me?.nickname||currentNickname||"나")}</div><div class="player-status">나의 자리</div></div><div class="vs">VS</div><div class="player partner"><div class="avatar">🐻</div><div class="player-name">${escapeHtml(partner?.nickname||"상대방")}</div><div class="player-status">${partner?"참여 완료 💕":"참여 대기 중"}</div></div>`;
-  $("startBtn").disabled=busy||members.length!==2;startPolling();
+  showScreen("lobbyScreen");
+  $("roomCode").textContent=roomCode||"--------";
+
+  const members=Array.isArray(s?.members)?s.members:[];
+  const me=members.find(m=>m.is_me);
+  const partner=members.find(m=>!m.is_me);
+
+  $("lobbyPlayers").innerHTML=`
+    <div class="player">
+      <div class="avatar">🐰</div>
+      <div class="player-name">${escapeHtml(me?.nickname||currentNickname||"나")}</div>
+      <div class="player-status">나의 자리</div>
+    </div>
+    <div class="vs">VS</div>
+    <div class="player partner">
+      <div class="avatar">🐻</div>
+      <div class="player-name">${escapeHtml(partner?.nickname||"상대방")}</div>
+      <div class="player-status">${partner?"참여 완료 💕":"참여 대기 중"}</div>
+    </div>
+  `;
+
+  $("startBtn").disabled=busy||members.length!==2;
 }
+
 async function submitAnswer(){
   if(busy||!state?.session_id)return;
-  if(!selectedAnswer){notice("먼저 마음에 드는 선택지를 눌러 줘 💗","error");return;}
-  clearNotice();setBusy(true);
-  try{const {error}=await db.rpc("submit_couple_answer",{p_session_id:Number(state.session_id),p_answer_text:selectedAnswer});if(error)throw error;selectedAnswer=null;await refreshState();notice("선택 완료! 상대방의 답을 기다려 보자 🤫","success");}
-  catch(e){notice(friendlyError(e),"error");}finally{setBusy(false);}
+
+  if(!selectedAnswer){
+    notice("먼저 마음에 드는 선택지를 눌러 줘 💗","error");
+    return;
+  }
+
+  clearNotice();
+  setBusy(true);
+
+  try{
+    const {error}=await db.rpc("submit_couple_answer",{
+      p_session_id:Number(state.session_id),
+      p_answer_text:selectedAnswer
+    });
+    if(error)throw error;
+
+    selectedAnswer=null;
+    await refreshState();
+    notice("선택 완료! 상대방의 답을 기다려 보자 🤫","success");
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }finally{
+    setBusy(false);
+  }
 }
+
 function chooseAnswer(type){
   if(!state||(state.my_answer!==null&&state.my_answer!==undefined))return;
-  const me=getMe(),partner=getPartner();if(!me||!partner){notice("상대방도 방에 들어와야 선택할 수 있어.","error");return;}
-  selectedAnswer=type==="me"?"person:"+me.user_id:type==="partner"?"person:"+partner.user_id:"both";renderChoices();
+
+  const me=getMe();
+  const partner=getPartner();
+
+  if(!me||!partner){
+    notice("상대방도 방에 들어와야 선택할 수 있어.","error");
+    return;
+  }
+
+  selectedAnswer=
+    type==="me"?"person:"+me.user_id:
+    type==="partner"?"person:"+partner.user_id:
+    "both";
+
+  renderChoices();
 }
+
 function renderChoices(){
-  const me=getMe(),partner=getPartner();
-  const opts=[{type:"me",value:me?"person:"+me.user_id:"",label:"나",icon:"🐰",hint:"내가 더 그래!"},{type:"partner",value:partner?"person:"+partner.user_id:"",label:partner?.nickname||"상대방",icon:"🐻",hint:"네가 더 그래!"},{type:"both",value:"both",label:"둘 다!",icon:"💞",hint:"우리 똑같아!"}];
-  $("choices").innerHTML=opts.map(o=>`<button type="button" class="choice ${selectedAnswer===o.value?"selected":""}" onclick="window.__couple.chooseAnswer('${o.type}')" ${(state?.my_answer!==null&&state?.my_answer!==undefined)?"disabled":""}><span class="choice-icon">${o.icon}</span><span class="choice-name">${escapeHtml(o.label)}</span><span class="choice-hint">${o.hint}</span></button>`).join("");
+  const me=getMe();
+  const partner=getPartner();
+
+  const opts=[
+    {type:"me",value:me?"person:"+me.user_id:"",label:"나",icon:"🐰",hint:"내가 더 그래!"},
+    {type:"partner",value:partner?"person:"+partner.user_id:"",label:partner?.nickname||"상대방",icon:"🐻",hint:"네가 더 그래!"},
+    {type:"both",value:"both",label:"둘 다!",icon:"💞",hint:"우리 똑같아!"}
+  ];
+
+  $("choices").innerHTML=opts.map(o=>`
+    <button type="button" class="choice ${selectedAnswer===o.value?"selected":""}"
+      onclick="window.__couple.chooseAnswer('${o.type}')"
+      ${(state?.my_answer!==null&&state?.my_answer!==undefined)?"disabled":""}>
+      <span class="choice-icon">${o.icon}</span>
+      <span class="choice-name">${escapeHtml(o.label)}</span>
+      <span class="choice-hint">${o.hint}</span>
+    </button>
+  `).join("");
+
   $("submitBtn").disabled=busy||!selectedAnswer||(state?.my_answer!==null&&state?.my_answer!==undefined);
 }
+
 async function refreshState(){
   if(!roomId||!currentUser||!db)return;
-  const {data,error}=await db.rpc("get_couple_game_state",{p_couple_id:Number(roomId)});if(error)throw error;
-  const result=typeof data==="string"?JSON.parse(data):data;state=result;
-  if(!result.has_game){renderLobby(result);return;}
+
+  const {data,error}=await db.rpc("get_couple_game_state",{
+    p_couple_id:Number(roomId)
+  });
+  if(error)throw error;
+
+  const result=typeof data==="string"?JSON.parse(data):data;
+  state=result;
+
+  if(!result.has_game){
+    renderLobby(result);
+    startPolling();
+    return;
+  }
+
   renderStatusRows();
-  if(result.status==="revealed"&&Array.isArray(result.answers)&&result.answers.length>=2)renderResults(result);
-  else if(result.my_answer!==null&&result.my_answer!==undefined)renderWaiting(result);
-  else renderQuestion(result);
+
+  if(result.status==="revealed"&&Array.isArray(result.answers)&&result.answers.length>=2){
+    renderResults(result);
+  }else if(result.my_answer!==null&&result.my_answer!==undefined){
+    renderWaiting(result);
+  }else{
+    renderQuestion(result);
+  }
+
   startPolling();
 }
+
 function renderQuestion(s){
-  showScreen("gameScreen");$("questionText").textContent=s.question||"질문을 불러오지 못했어.";
+  showScreen("gameScreen");
+
+  $("questionText").textContent=s.question||"질문을 불러오지 못했어.";
   $("questionNumber").textContent="QUESTION "+String((s.rounds_played||0)+1).padStart(2,"0");
-  updateScoreboard(s);renderChoices();renderStatusRows();
+
+  updateScoreboard(s);
+  renderChoices();
+  renderStatusRows();
 }
+
 function renderWaiting(s){
-  showScreen("waitingScreen");updateScoreboard(s);$("waitingScore").textContent=s.match_points||0;
-  $("waitingRoundCaption").textContent=(s.rounds_played||0)+"문제 완료";renderStatusRows();
+  showScreen("waitingScreen");
+  updateScoreboard(s);
+  $("waitingScore").textContent=s.match_points||0;
+  $("waitingRoundCaption").textContent=(s.rounds_played||0)+"문제 완료";
+  renderStatusRows();
 }
+
 function renderStatusRows(){
-  const html=getMembers().map(m=>{const done=m.submitted===true;return `<div class="status-row"><div class="status-avatar">${done?"✅":"⏳"}</div><div class="status-name">${escapeHtml(m.nickname||"익명")}${m.is_me?" (나)":""}</div><div class="status-text ${done?"done":"pending"}">${done?"답변 완료":"답변 대기 중"}</div></div>`;}).join("")||'<div class="muted">참여자를 확인하는 중이야.</div>';
-  $("gameStatusRows").innerHTML=html;$("waitingStatusRows").innerHTML=html;
+  const html=getMembers().map(m=>{
+    const done=m.submitted===true;
+    return `
+      <div class="status-row">
+        <div class="status-avatar">${done?"✅":"⏳"}</div>
+        <div class="status-name">${escapeHtml(m.nickname||"익명")}${m.is_me?" (나)":""}</div>
+        <div class="status-text ${done?"done":"pending"}">${done?"답변 완료":"답변 대기 중"}</div>
+      </div>
+    `;
+  }).join("")||'<div class="muted">참여자를 확인하는 중이야.</div>';
+
+  $("gameStatusRows").innerHTML=html;
+  $("waitingStatusRows").innerHTML=html;
 }
+
 function updateScoreboard(s){
-  const points=s.match_points||0,rounds=s.rounds_played||0;
-  $("scoreValue").textContent=points;$("waitingScore").textContent=points;$("progressText").textContent=rounds+"문제 완료";
+  const points=s.match_points||0;
+  const rounds=s.rounds_played||0;
+
+  $("scoreValue").textContent=points;
+  $("waitingScore").textContent=points;
+  $("progressText").textContent=rounds+"문제 완료";
   $("roundCaption").textContent=rounds===0?"첫 번째 질문에 도전해 봐!":rounds+"번의 결과를 모았어 💕";
   $("progressFill").style.width=Math.min(100,rounds/36*100)+"%";
 }
+
 function describeAnswer(text,members){
   if(text==="both")return "둘 다! 💞";
-  if(text&&text.startsWith("person:")){const id=text.slice(7);const m=members.find(x=>x.user_id===id);return m?m.nickname:"선택한 사람";}
+
+  if(text&&text.startsWith("person:")){
+    const id=text.slice(7);
+    const m=members.find(x=>x.user_id===id);
+    return m?m.nickname:"선택한 사람";
+  }
+
   return "선택 정보 없음";
 }
+
 function renderResults(s){
-  showScreen("resultScreen");const answers=Array.isArray(s.answers)?s.answers:[];
+  showScreen("resultScreen");
+
+  const answers=Array.isArray(s.answers)?s.answers:[];
   const matched=answers.length>=2&&answers[0].answer_text===answers[1].answer_text;
-  $("resultEmoji").textContent=matched?"💖":"🙈";$("resultHeadline").textContent=matched?"찰떡궁합!":"앗, 생각이 달랐어!";
-  $("resultDescription").textContent=matched?"두 사람이 같은 답을 골랐어! 케미 점수 +1점 ✨":"서로 다른 답을 골랐네. 다음 질문에서 다시 도전!";
-  $("resultQuestion").textContent=s.question||"";$("resultQuestionNumber").textContent="ROUND "+(s.rounds_played||1)+" RESULT";
-  $("resultAnswers").innerHTML=answers.map(a=>`<div class="answer-card"><div class="answer-person">${escapeHtml(a.nickname||"익명")}${a.is_me?" (나)":""}</div><div class="answer-value">${escapeHtml(describeAnswer(a.answer_text,getMembers()))}</div></div>`).join("");
-  $("resultScore").textContent=s.match_points||0;$("resultRoundCaption").textContent=(s.rounds_played||0)+"문제 완료";$("nextBtn").disabled=busy;
+
+  $("resultEmoji").textContent=matched?"💖":"🙈";
+  $("resultHeadline").textContent=matched?"찰떡궁합!":"앗, 생각이 달랐어!";
+  $("resultDescription").textContent=matched
+    ?"두 사람이 같은 답을 골랐어! 케미 점수 +1점 ✨"
+    :"서로 다른 답을 골랐네. 다음 질문에서 다시 도전!";
+
+  $("resultQuestion").textContent=s.question||"";
+  $("resultQuestionNumber").textContent="ROUND "+(s.rounds_played||1)+" RESULT";
+
+  $("resultAnswers").innerHTML=answers.map(a=>`
+    <div class="answer-card">
+      <div class="answer-person">${escapeHtml(a.nickname||"익명")}${a.is_me?" (나)":""}</div>
+      <div class="answer-value">${escapeHtml(describeAnswer(a.answer_text,getMembers()))}</div>
+    </div>
+  `).join("");
+
+  $("resultScore").textContent=s.match_points||0;
+  $("resultRoundCaption").textContent=(s.rounds_played||0)+"문제 완료";
+  $("nextBtn").disabled=busy;
 }
-function backToLobby(){if(state)renderLobby(state);else showScreen("roomScreen");}
+
+function backToLobby(){
+  if(state)renderLobby(state);
+  else showScreen("roomScreen");
+}
+
 async function initialize(){
-  if(!window.supabase){notice("Supabase 라이브러리를 불러오지 못했어. 인터넷 연결을 확인해 줘.","error");showScreen("accountScreen");return;}
+  if(!window.supabase){
+    notice("Supabase 라이브러리를 불러오지 못했어. 인터넷 연결을 확인해 줘.","error");
+    showScreen("accountScreen");
+    return;
+  }
+
   accounts=readAccounts();
-  try{await migrateLegacySession();}catch(e){console.error("Legacy session migration:",e);}
-  accounts=readAccounts();renderAccounts();showScreen("accountScreen");
+
+  try{
+    await migrateLegacySession();
+  }catch(e){
+    console.error("Legacy session migration:",e);
+  }
+
+  accounts=readAccounts();
+  renderAccounts();
+  showScreen("accountScreen");
 }
+
 window.__couple={selectAccount,removeAccount,chooseAnswer};
-window.showAccounts=showAccounts;window.showNewAccount=showNewAccount;window.createAccount=createAccount;
-window.createRoom=createRoom;window.joinRoom=joinRoom;window.copyRoomCode=copyRoomCode;window.disconnectThisDevice=disconnectThisDevice;
-window.startGame=startGame;window.nextQuestion=nextQuestion;window.submitAnswer=submitAnswer;window.backToLobby=backToLobby;
+window.showAccounts=showAccounts;
+window.showNewAccount=showNewAccount;
+window.createAccount=createAccount;
+window.createRoom=createRoom;
+window.joinRoom=joinRoom;
+window.copyRoomCode=copyRoomCode;
+window.disconnectThisDevice=disconnectThisDevice;
+window.startGame=startGame;
+window.nextQuestion=nextQuestion;
+window.submitAnswer=submitAnswer;
+window.backToLobby=backToLobby;
+
 initialize();
 })();
 </script>
