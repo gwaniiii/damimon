@@ -1,0 +1,16 @@
+{
+  "name": "우리 진짜 잘 맞을까?",
+  "short_name": "우리 맞아?",
+  "description": "둘이 선택하고 결과를 공개하는 커플 케미 게임",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff8fb",
+  "theme_color": "#fff7fb",
+  "lang": "ko",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -6,6 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#fff7fb">
 <title>우리 진짜 잘 맞을까? 💗</title>
+
+<!-- PWA 설정 -->
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="우리 맞아?">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--pink:#ef78a4;--pink2:#d9578a;--purple:#9b87df;--ink:#403447;--muted:#93869a;--line:#f0dce7;--bg:#fff8fb;--green:#27835c;--shadow:0 12px 32px #9f648014}
@@ -87,6 +96,9 @@ input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
 .answer-card{padding:13px;border-radius:15px;background:#fff9fc;border:1px solid var(--line);margin:9px 0}
 .answer-person{font-size:11px;color:var(--muted);font-weight:900;margin-bottom:6px}
 .answer-value{font-size:15px;font-weight:1000;overflow-wrap:anywhere}
+.text-answer{font-size:17px;font-weight:800;padding:16px}
+.approve-box{margin:4px 0 14px;padding:13px;border-radius:16px;background:#fffbfd;border:1px dashed #f1bfd5;text-align:center}
+.approve-status{font-size:11px;color:var(--muted);font-weight:800;margin-top:7px}
 .footer{text-align:center;padding:14px 8px;color:#b2a0b1;font-size:10px;line-height:1.8}
 @media(max-width:370px){.card{padding:17px}.choices{gap:5px}.choice-name{font-size:11px}.question-text{font-size:21px}.account-actions{flex-direction:column}}
 </style>
@@ -95,7 +107,7 @@ input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
 <main class="app">
 <header class="topbar">
   <div class="brand"><div class="brand-icon">💗</div><span>우리 진짜 맞아?</span></div>
-  <div class="top-actions"><span id="accountChip" class="chip">계정 선택</span><button id="switchBtn" class="mini hidden" type="button" onclick="showAccounts()">계정 전환</button></div>
+  <div class="top-actions"><button id="soundBtn" class="mini" type="button" onclick="toggleSound()" aria-label="효과음 켜기/끄기">🔊</button><span id="accountChip" class="chip">계정 선택</span><button id="switchBtn" class="mini hidden" type="button" onclick="showAccounts()">계정 전환</button></div>
 </header>
 
 <section class="hero">
@@ -156,8 +168,9 @@ input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
   <div class="progress-caption"><span>우리의 케미 여정</span><span id="progressText">0문제 완료</span></div>
   <div class="progress-line"><div id="progressFill" class="progress-fill"></div></div>
   <div class="question-box"><div id="questionNumber" class="question-number">QUESTION 01</div><div id="questionText" class="question-text">질문을 불러오는 중...</div></div>
-  <p class="choose-caption">누구라고 생각해? 하나를 골라 봐 👇</p>
+  <p class="choose-caption" id="chooseCaption">누구라고 생각해? 하나를 골라 봐 👇</p>
   <div id="choices" class="choices"></div>
+  <div id="textAnswerBox" class="hidden"><input id="textAnswer" class="text-answer" maxlength="100" placeholder="기억나는 대로 적어 봐 ✍️" autocomplete="off"></div>
   <div class="status-panel"><div class="status-title">💌 답변 현황</div><div id="gameStatusRows"></div></div>
   <button class="btn" id="submitBtn" type="button" onclick="submitAnswer()">이 답으로 결정! 💘</button>
   <p class="muted" style="text-align:center">둘 다 제출하면 답변이 공개돼!</p>
@@ -177,6 +190,7 @@ input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
   <div class="result-banner"><div id="resultEmoji" class="result-emoji">💞</div><div id="resultHeadline" class="result-match">결과 확인!</div><p id="resultDescription" class="muted"></p></div>
   <div class="question-box"><div id="resultQuestionNumber" class="question-number">ROUND RESULT</div><div id="resultQuestion" class="question-text"></div></div>
   <div id="resultAnswers"></div>
+  <div id="approveBox" class="approve-box hidden"><div class="muted" style="margin:0 0 4px">표현만 다르고 같은 뜻이면?</div><button class="btn soft" id="approveBtn" type="button" onclick="approveMatch()">같은 뜻이야! 인정 💕</button><div id="approveStatus" class="approve-status"></div></div>
   <div class="scoreboard"><div><div class="score-label">💖 누적 케미 점수</div><div class="muted" id="resultRoundCaption">우리 둘의 기록</div></div><div class="score-value"><span id="resultScore">0</span>점</div></div>
   <button class="btn" id="nextBtn" type="button" onclick="nextQuestion()">다음 질문 대결하기 🎮</button>
   <button class="btn secondary" type="button" onclick="backToLobby()">방으로 돌아가기</button>
@@ -211,6 +225,74 @@ let pollTimer = null;
 let pollInFlight = false;
 let busy = false;
 let activeScreenId = null;
+let lastSessionId = null;
+let lastResultSoundKey = null;
+
+/* ===== 효과음 (파일 없이 브라우저에서 직접 만드는 소리) ===== */
+const SOUND_KEY="couple_sound_on";
+let soundOn=true;
+try{soundOn=localStorage.getItem(SOUND_KEY)!=="off";}catch{}
+let audioCtx=null;
+
+function getAudio(){
+  if(!audioCtx){
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return null;
+    audioCtx=new AC();
+  }
+  if(audioCtx.state==="suspended")audioCtx.resume();
+  return audioCtx;
+}
+
+// 브라우저는 화면을 한 번 터치해야 소리를 허락해 줌
+document.addEventListener("pointerdown",()=>{if(soundOn)getAudio();},{passive:true});
+
+function tone(freq,start,dur,type="sine",vol=.15,slideTo=null){
+  const ctx=getAudio();
+  if(!ctx)return;
+  const t=ctx.currentTime+start;
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type=type;
+  osc.frequency.setValueAtTime(freq,t);
+  if(slideTo)osc.frequency.exponentialRampToValueAtTime(slideTo,t+dur);
+  gain.gain.setValueAtTime(.0001,t);
+  gain.gain.exponentialRampToValueAtTime(vol,t+.015);
+  gain.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t);
+  osc.stop(t+dur+.05);
+}
+
+const SFX={
+  tap(){tone(660,0,.09,"sine",.12,880);},
+  submit(){tone(523,0,.12,"triangle",.15);tone(784,.1,.2,"triangle",.15);},
+  match(){
+    [523,659,784,1047].forEach((f,i)=>tone(f,i*.09,.26,"triangle",.16));
+    tone(1568,.4,.4,"sine",.08);
+  },
+  mismatch(){
+    tone(392,0,.2,"square",.06,330);
+    tone(311,.2,.36,"square",.06,220);
+  },
+  approve(){[1319,1568,2093].forEach((f,i)=>tone(f,i*.07,.16,"sine",.08));}
+};
+
+function playSfx(name){
+  if(!soundOn)return;
+  try{SFX[name]?.();}catch{}
+}
+
+function updateSoundButton(){
+  $("soundBtn").textContent=soundOn?"🔊":"🔇";
+}
+
+function toggleSound(){
+  soundOn=!soundOn;
+  try{localStorage.setItem(SOUND_KEY,soundOn?"on":"off");}catch{}
+  updateSoundButton();
+  if(soundOn)playSfx("tap");
+}
 
 function notice(message,type="info"){
   $("notice").textContent=message;
@@ -660,6 +742,16 @@ async function nextQuestion(){
   await startGame();
 }
 
+function isTextQuestion(){
+  return state?.question_type==="text";
+}
+
+function updateSubmitButton(){
+  const answered=state?.my_answer!==null&&state?.my_answer!==undefined;
+  const ready=isTextQuestion()?$("textAnswer").value.trim().length>0:!!selectedAnswer;
+  $("submitBtn").disabled=busy||!ready||answered;
+}
+
 function getMembers(){
   return Array.isArray(state?.members)?state.members:[];
 }
@@ -698,8 +790,10 @@ function renderLobby(s){
 async function submitAnswer(){
   if(busy||!state?.session_id)return;
 
-  if(!selectedAnswer){
-    notice("먼저 마음에 드는 선택지를 눌러 줘 💗","error");
+  const answer=isTextQuestion()?$("textAnswer").value.trim():selectedAnswer;
+
+  if(!answer){
+    notice(isTextQuestion()?"먼저 답을 적어 줘 ✍️":"먼저 마음에 드는 선택지를 눌러 줘 💗","error");
     return;
   }
 
@@ -709,11 +803,13 @@ async function submitAnswer(){
   try{
     const {error}=await db.rpc("submit_couple_answer",{
       p_session_id:Number(state.session_id),
-      p_answer_text:selectedAnswer
+      p_answer_text:answer
     });
     if(error)throw error;
 
     selectedAnswer=null;
+    $("textAnswer").value="";
+    playSfx("submit");
     await refreshState();
     notice("선택 완료! 상대방의 답을 기다려 보자 🤫","success");
   }catch(e){
@@ -739,6 +835,7 @@ function chooseAnswer(type){
     type==="partner"?"person:"+partner.user_id:
     "both";
 
+  playSfx("tap");
   renderChoices();
 }
 
@@ -762,7 +859,7 @@ function renderChoices(){
     </button>
   `).join("");
 
-  $("submitBtn").disabled=busy||!selectedAnswer||(state?.my_answer!==null&&state?.my_answer!==undefined);
+  updateSubmitButton();
 }
 
 async function refreshState(){
@@ -801,8 +898,22 @@ function renderQuestion(s){
   $("questionText").textContent=s.question||"질문을 불러오지 못했어.";
   $("questionNumber").textContent="QUESTION "+String((s.rounds_played||0)+1).padStart(2,"0");
 
+  if(s.session_id!==lastSessionId){
+    lastSessionId=s.session_id;
+    selectedAnswer=null;
+    $("textAnswer").value="";
+  }
+
+  const isText=s.question_type==="text";
+  $("choices").classList.toggle("hidden",isText);
+  $("textAnswerBox").classList.toggle("hidden",!isText);
+  $("chooseCaption").textContent=isText
+    ?"우리 둘의 기억, 똑같을까? 직접 적어 봐 ✍️"
+    :"누구라고 생각해? 하나를 골라 봐 👇";
+
   updateScoreboard(s);
-  renderChoices();
+  if(isText)updateSubmitButton();
+  else renderChoices();
   renderStatusRows();
 }
 
@@ -838,7 +949,7 @@ function updateScoreboard(s){
   $("waitingScore").textContent=points;
   $("progressText").textContent=rounds+"문제 완료";
   $("roundCaption").textContent=rounds===0?"첫 번째 질문에 도전해 봐!":rounds+"번의 결과를 모았어 💕";
-  $("progressFill").style.width=Math.min(100,rounds/36*100)+"%";
+  $("progressFill").style.width=Math.min(100,rounds/(s.total_questions||36)*100)+"%";
 }
 
 function describeAnswer(text,members){
@@ -850,20 +961,40 @@ function describeAnswer(text,members){
     return m?m.nickname:"선택한 사람";
   }
 
-  return "선택 정보 없음";
+  return text||"답 없음";
 }
 
 function renderResults(s){
   showScreen("resultScreen");
 
   const answers=Array.isArray(s.answers)?s.answers:[];
-  const matched=answers.length>=2&&answers[0].answer_text===answers[1].answer_text;
+  const isText=s.question_type==="text";
+  const matched=typeof s.is_match==="boolean"
+    ?s.is_match
+    :answers.length>=2&&answers[0].answer_text===answers[1].answer_text;
 
-  $("resultEmoji").textContent=matched?"💖":"🙈";
-  $("resultHeadline").textContent=matched?"찰떡궁합!":"앗, 생각이 달랐어!";
+  $("resultEmoji").textContent=matched?"💖":isText?"😳":"🙈";
+  $("resultHeadline").textContent=matched?"찰떡궁합!":isText?"어라... 기억이 달라!":"앗, 생각이 달랐어!";
   $("resultDescription").textContent=matched
-    ?"두 사람이 같은 답을 골랐어! 케미 점수 +1점 ✨"
-    :"서로 다른 답을 골랐네. 다음 질문에서 다시 도전!";
+    ?(isText?"둘의 기억이 똑같아! 케미 점수 +1점 ✨":"두 사람이 같은 답을 골랐어! 케미 점수 +1점 ✨")
+    :(isText?"누구 기억이 맞는 건지 지금 바로 얘기해 봐 😏":"서로 다른 답을 골랐네. 다음 질문에서 다시 도전!");
+
+  const soundKey=s.session_id+":"+matched;
+  if(soundKey!==lastResultSoundKey){
+    lastResultSoundKey=soundKey;
+    playSfx(matched?"match":"mismatch");
+  }
+
+  const showApprove=isText&&!matched;
+  $("approveBox").classList.toggle("hidden",!showApprove);
+  if(showApprove){
+    const count=s.approval_count||0;
+    $("approveBtn").disabled=busy||s.i_approved===true;
+    $("approveBtn").textContent=s.i_approved?"인정 완료 ✔":"같은 뜻이야! 인정 💕";
+    $("approveStatus").textContent=s.i_approved
+      ?`상대방도 인정하면 +1점 (${count}/2)`
+      :`둘 다 인정하면 +1점 (${count}/2)`;
+  }
 
   $("resultQuestion").textContent=s.question||"";
   $("resultQuestionNumber").textContent="ROUND "+(s.rounds_played||1)+" RESULT";
@@ -878,6 +1009,25 @@ function renderResults(s){
   $("resultScore").textContent=s.match_points||0;
   $("resultRoundCaption").textContent=(s.rounds_played||0)+"문제 완료";
   $("nextBtn").disabled=busy;
+}
+
+async function approveMatch(){
+  if(busy||!state?.session_id)return;
+
+  clearNotice();
+  setBusy(true);
+  $("approveBtn").disabled=true;
+
+  try{
+    const {error}=await db.rpc("approve_couple_match",{p_session_id:Number(state.session_id)});
+    if(error)throw error;
+    playSfx("approve");
+    await refreshState();
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }finally{
+    setBusy(false);
+  }
 }
 
 function backToLobby(){
@@ -917,9 +1067,27 @@ window.startGame=startGame;
 window.nextQuestion=nextQuestion;
 window.submitAnswer=submitAnswer;
 window.backToLobby=backToLobby;
+window.approveMatch=approveMatch;
+window.toggleSound=toggleSound;
+updateSoundButton();
+
+$("textAnswer").addEventListener("input",updateSubmitButton);
+$("textAnswer").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.isComposing){
+    e.preventDefault();
+    submitAnswer();
+  }
+});
 
 initialize();
 })();
+
+// PWA 서비스 워커 등록
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
