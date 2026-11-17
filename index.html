@@ -15,6 +15,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 맞아?">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--pink:#ef78a4;--pink2:#d9578a;--purple:#9b87df;--ink:#403447;--muted:#93869a;--line:#f0dce7;--bg:#fff8fb;--green:#27835c;--shadow:0 12px 32px #9f648014}
@@ -101,52 +102,142 @@ input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
 .approve-status{font-size:11px;color:var(--muted);font-weight:800;margin-top:7px}
 .footer{text-align:center;padding:14px 8px;color:#b2a0b1;font-size:10px;line-height:1.8}
 @media(max-width:370px){.card{padding:17px}.choices{gap:5px}.choice-name{font-size:11px}.question-text{font-size:21px}.account-actions{flex-direction:column}}
+/* ===== 시작 화면 리디자인 ===== */
+:root{--pink:#e5679a;--pink2:#d4527f;--ink:#2f2433;--muted:#8a7d8e;--line:#efe3ea;--bg:#fbf8fa;--shadow:0 1px 2px #2f24330a,0 8px 24px #2f24330d}
+body{font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;background:linear-gradient(180deg,#fdeef4 0,#fbf8fa 320px);-webkit-font-smoothing:antialiased;word-break:keep-all}
+.topbar{padding:14px 2px 6px}
+.brand{font-size:15px;font-weight:800;letter-spacing:-.3px;gap:8px}
+.brand-mark{width:28px;height:28px;border-radius:8px;box-shadow:0 1px 3px #2f243322}
+.icon-btn{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);background:#fff;border-radius:10px;font-size:14px;padding:0}
+.chip{background:#fff;color:var(--muted);font-weight:700;border-radius:10px;padding:8px 10px}
+.mini{border-radius:10px;font-weight:700;color:var(--muted)}
+.hero{padding:30px 8px 26px}
+.hero-mark{width:76px;height:76px;border-radius:22px;display:block;margin:0 auto 18px;box-shadow:0 10px 30px #d4527f33}
+.hero-kicker{margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#c06a90}
+h1{font-size:clamp(26px,7vw,32px);font-weight:800;letter-spacing:-1px;line-height:1.25;margin:0 0 10px}
+.subtitle{font-size:14px;line-height:1.6;color:var(--muted);margin:0 auto;max-width:300px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+.card-head{margin-bottom:18px}
+.step-label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.4px;color:#c06a90;margin-bottom:8px}
+h2{font-size:21px;font-weight:800;letter-spacing:-.6px;margin:0 0 6px}
+.muted{font-size:13.5px;line-height:1.6}
+.fine-print{margin:14px 0 0;font-size:11.5px;line-height:1.6;color:#a497a8}
+.label{font-size:12.5px;font-weight:700;color:#5b4e60;margin:0 0 8px}
+input{background:#fcfafb;border:1px solid #e9dde4;border-radius:12px;padding:14px;font-size:15px}
+input:focus{border-color:var(--pink);box-shadow:0 0 0 4px #e5679a1f;background:#fff}
+.btn{border-radius:12px;padding:15px;font-size:15px;font-weight:700;letter-spacing:-.2px;background:var(--pink);box-shadow:0 4px 12px #d4527f2e}
+.btn:active{transform:scale(.985)}
+.btn.secondary{background:#2f2433;color:#fff;box-shadow:none}
+.btn.ghost{background:transparent;border:0;color:var(--muted);font-weight:600;padding:12px;margin-top:6px}
+.btn.soft{background:#fdeef4;color:var(--pink2)}
+.separator{margin:18px 0;font-size:11px;font-weight:700;color:#b9adbd}
+.option-block{display:grid;gap:0}
+.option-title{font-size:12.5px;font-weight:700;color:#5b4e60;margin-bottom:2px}
+.option-block input{margin-top:8px}
+.account-list{gap:8px;margin:0 0 6px}
+.account-row{gap:12px;padding:12px 12px 12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;transition:border-color .15s}
+.account-row.current{border-color:#f0bcd2;background:#fff8fb}
+.account-initial{width:40px;height:40px;flex-shrink:0;display:grid;place-items:center;border-radius:12px;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,#f08fb5,#d4527f)}
+.account-initial.alt{background:linear-gradient(135deg,#b3a2ec,#8a72d6)}
+.account-name{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.account-sub{font-size:11.5px;margin-top:3px}
+.account-actions{gap:4px;align-items:center}
+.row-btn{border:0;border-radius:9px;padding:9px 13px;font-size:12.5px;font-weight:700;background:var(--pink);color:#fff}
+.row-btn.subtle{background:transparent;color:#b3a6b6;padding:9px 8px;font-weight:600}
+.empty-state{padding:22px 10px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:14px}
+.app.in-game .hero{display:none}
+.app.in-game .topbar{padding-bottom:14px}
+.footer{font-size:10.5px;color:#c0b4c3;letter-spacing:.3px}
+.online-head{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:12.5px;font-weight:700;color:#5b4e60}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#2fbf71;box-shadow:0 0 0 0 #2fbf7166;animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #2fbf7166}70%{box-shadow:0 0 0 8px #2fbf7100}100%{box-shadow:0 0 0 0 #2fbf7100}}
+.presence{display:inline-flex;align-items:center;gap:5px}
+.presence:before{content:"";width:6px;height:6px;border-radius:50%;background:#2fbf71}
+.presence.busy:before{background:#f0a23b}
+.row-btn:disabled{opacity:.4}
+.modal{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:#2f243359;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.modal-card{width:min(100%,340px);background:#fff;border-radius:22px;padding:26px 22px 18px;text-align:center;box-shadow:0 20px 60px #2f243340;animation:pop .22s ease-out}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
+.modal-mark{width:60px;height:60px;border-radius:18px;margin-bottom:14px;box-shadow:0 8px 22px #d4527f33}
+.modal-title{font-size:19px;font-weight:800;letter-spacing:-.5px;line-height:1.4}
+.modal-card .muted{margin:8px 0 4px}
+.modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.modal-actions.single{grid-template-columns:1fr}
+.modal-actions .btn{margin-top:0}
+.modal-actions .btn.ghost{background:#f6f1f4;color:#6f6274;margin:0}
+.spinner{width:26px;height:26px;margin:14px auto 0;border-radius:50%;border:3px solid #f6dbe7;border-top-color:var(--pink);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+button.chip{cursor:pointer}
 </style>
 </head>
 <body>
-<main class="app">
+<main class="app" id="app">
 <header class="topbar">
-  <div class="brand"><div class="brand-icon">💗</div><span>우리 진짜 맞아?</span></div>
-  <div class="top-actions"><button id="soundBtn" class="mini" type="button" onclick="toggleSound()" aria-label="효과음 켜기/끄기">🔊</button><span id="accountChip" class="chip">계정 선택</span><button id="switchBtn" class="mini hidden" type="button" onclick="showAccounts()">계정 전환</button></div>
+  <div class="brand"><img class="brand-mark" src="./icon-192.png" alt=""><span>우리 진짜 맞아?</span></div>
+  <div class="top-actions"><button id="soundBtn" class="icon-btn" type="button" onclick="toggleSound()" aria-label="효과음 켜기/끄기">🔊</button><button id="accountChip" class="chip" type="button" onclick="showAccounts()" aria-label="계정 바꾸기">계정 선택</button><button id="switchBtn" class="mini hidden" type="button" onclick="showAccounts()">계정 전환</button></div>
 </header>
 
-<section class="hero">
-  <div class="hero-art" aria-hidden="true"><span>🐰</span><span>💞🐻</span></div>
-  <h1>우리 진짜<br>잘 맞을까?</h1>
-  <div class="subtitle">둘이 선택하고, 결과를 공개하고!<br>우리의 케미를 확인해 보자 💕</div>
+<section id="hero" class="hero">
+  <img class="hero-mark" src="./icon-192.png" alt="">
+  <p class="hero-kicker">Couple Chemistry Game</p>
+  <h1>우리 진짜 잘 맞을까?</h1>
+  <p class="subtitle">같은 질문에 각자 답하고, 둘의 기억이 얼마나 같은지 확인해 봐.</p>
 </section>
 
 <div id="notice" class="notice" aria-live="polite"></div>
 
 <section id="accountScreen" class="card hidden">
-  <span class="eyebrow">MY COUPLE ACCOUNTS</span>
-  <h2>누구로 시작할까요? 💗</h2>
-  <p class="muted">저장된 계정을 선택하거나 새로운 사용자를 추가해 줘.</p>
+  <div class="card-head">
+    <span class="step-label">STEP 1 · 계정</span>
+    <h2>누구로 시작할까?</h2>
+    <p class="muted">이 기기에 저장된 계정을 선택하거나 새로 만들어 줘.</p>
+  </div>
   <div id="accountList" class="account-list"></div>
-  <button class="btn" type="button" onclick="showNewAccount()">새로운 사용자 추가하기 ✨</button>
-  <p class="muted" style="margin:12px 0 0">계정은 이 기기의 브라우저에 저장돼. 브라우저 데이터 삭제나 기기 변경 시 익명 계정을 복구하지 못할 수 있어.</p>
+  <button class="btn" type="button" onclick="showNewAccount()">새 계정 만들기</button>
+  <p class="fine-print">계정은 이 기기의 브라우저에 저장돼. 브라우저 데이터를 지우거나 기기를 바꾸면 복구가 어려울 수 있어.</p>
 </section>
 
 <section id="profileScreen" class="card hidden">
-  <span class="eyebrow">NEW PLAYER</span>
-  <h2>반가워! 어떤 이름으로 할까? 🐣</h2>
-  <p class="muted">같은 닉네임을 사용해도 서로 다른 계정으로 저장돼.</p>
-  <label class="label" for="nickname">내 이름</label>
+  <div class="card-head">
+    <span class="step-label">STEP 1 · 새 계정</span>
+    <h2>이름을 알려줘</h2>
+    <p class="muted">게임에서 상대방에게 보이는 이름이야.</p>
+  </div>
+  <label class="label" for="nickname">이름</label>
   <input id="nickname" maxlength="20" placeholder="예: 태관" autocomplete="nickname">
-  <button class="btn" id="createAccountBtn" type="button" onclick="createAccount()">새 계정 만들기 💗</button>
-  <button class="btn ghost" type="button" onclick="showAccounts()">계정 목록으로 돌아가기</button>
+  <button class="btn" id="createAccountBtn" type="button" onclick="createAccount()">계정 만들기</button>
+  <button class="btn ghost" type="button" onclick="showAccounts()">뒤로</button>
 </section>
 
 <section id="roomScreen" class="card hidden">
-  <span class="eyebrow">LET'S PLAY TOGETHER</span>
-  <h2>우리 둘만의 게임방 💌</h2>
-  <p class="muted">한 명이 방을 만들고, 다른 한 명은 초대 코드로 들어와.</p>
-  <button class="btn" id="createRoomBtn" type="button" onclick="createRoom()">새 커플 방 만들기 ✨</button>
-  <div class="separator">또는 초대 코드가 있다면</div>
-  <label class="label" for="inviteCode">초대 코드</label>
-  <input id="inviteCode" maxlength="12" placeholder="상대방의 초대 코드" autocapitalize="characters">
-  <button class="btn secondary" id="joinBtn" type="button" onclick="joinRoom()">커플 방 참여하기 🫶</button>
-  <button class="btn ghost" type="button" onclick="showAccounts()">계정 전환</button>
+  <div class="card-head">
+    <span class="step-label">STEP 2 · 게임방</span>
+    <h2>둘만의 방 연결하기</h2>
+    <p class="muted">한 명이 방을 만들고, 다른 한 명은 초대 코드로 들어오면 돼.</p>
+  </div>
+  <div class="option-block">
+    <div class="option-title">처음이라면</div>
+    <button class="btn" id="createRoomBtn" type="button" onclick="createRoom()">새 방 만들기</button>
+  </div>
+  <div class="separator">또는</div>
+  <div class="option-block">
+    <div class="option-title">초대 코드를 받았다면</div>
+    <input id="inviteCode" maxlength="12" placeholder="초대 코드 8자리" autocapitalize="characters" aria-label="초대 코드">
+    <button class="btn secondary" id="joinBtn" type="button" onclick="joinRoom()">방 참여하기</button>
+  </div>
+  <button class="btn ghost" type="button" onclick="goHome()">홈으로</button>
+</section>
+
+<section id="homeScreen" class="card hidden">
+  <div class="card-head">
+    <span class="step-label" id="homeGreeting">안녕!</span>
+    <h2>누구랑 같이 할까?</h2>
+    <p class="muted">지금 앱을 켜 둔 사람들이야. 초대장을 보내고 상대가 수락하면 바로 시작돼.</p>
+  </div>
+  <div class="online-head"><span class="live-dot"></span><span id="onlineCount">접속 중인 사람을 찾는 중...</span></div>
+  <div id="onlineList" class="account-list"></div>
+  <button id="resumeBtn" class="btn secondary hidden" type="button" onclick="resumeGame()">하던 게임 이어하기</button>
+  <button class="btn ghost" type="button" onclick="showRoomScreen()">초대 코드로 연결하기</button>
 </section>
 
 <section id="lobbyScreen" class="card hidden">
@@ -159,7 +250,7 @@ input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
   <button class="btn" id="startBtn" type="button" onclick="startGame()">대결 시작하기 🎮</button>
   <p class="muted" style="text-align:center">같은 방에서 이미 플레이한 질문은 다시 나오지 않아.</p>
   <button class="btn soft" type="button" onclick="disconnectThisDevice()">이 계정의 기기 연결 정보 해제</button>
-  <button class="btn ghost" type="button" onclick="showAccounts()">계정 전환</button>
+  <button class="btn ghost" type="button" onclick="goHome()">홈으로</button>
 </section>
 
 <section id="gameScreen" class="card hidden">
@@ -174,14 +265,14 @@ input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
   <div class="status-panel"><div class="status-title">💌 답변 현황</div><div id="gameStatusRows"></div></div>
   <button class="btn" id="submitBtn" type="button" onclick="submitAnswer()">이 답으로 결정! 💘</button>
   <p class="muted" style="text-align:center">둘 다 제출하면 답변이 공개돼!</p>
-  <button class="btn ghost" type="button" onclick="showAccounts()">계정 전환</button>
+  <button class="btn ghost" type="button" onclick="goHome()">홈으로</button>
 </section>
 
 <section id="waitingScreen" class="card hidden">
   <div class="waiting"><div class="waiting-art">💌🐰</div><div class="waiting-title">내 선택 완료!</div><p class="muted">상대방도 선택할 때까지 기다리는 중이야.<br>누가 어떤 답을 골랐는지는 아직 비밀 🤫</p></div>
   <div class="scoreboard"><div><div class="score-label">💖 현재 케미 점수</div><div class="muted" id="waitingRoundCaption">결과를 기다리는 중</div></div><div class="score-value"><span id="waitingScore">0</span>점</div></div>
   <div class="status-panel"><div class="status-title">💌 답변 현황</div><div id="waitingStatusRows"></div></div>
-  <button class="btn ghost" type="button" onclick="showAccounts()">계정 전환</button>
+  <button class="btn ghost" type="button" onclick="goHome()">홈으로</button>
 </section>
 
 <section id="resultScreen" class="card hidden">
@@ -194,10 +285,20 @@ input:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff80aa24}
   <div class="scoreboard"><div><div class="score-label">💖 누적 케미 점수</div><div class="muted" id="resultRoundCaption">우리 둘의 기록</div></div><div class="score-value"><span id="resultScore">0</span>점</div></div>
   <button class="btn" id="nextBtn" type="button" onclick="nextQuestion()">다음 질문 대결하기 🎮</button>
   <button class="btn secondary" type="button" onclick="backToLobby()">방으로 돌아가기</button>
-  <button class="btn ghost" type="button" onclick="showAccounts()">계정 전환</button>
+  <button class="btn ghost" type="button" onclick="goHome()">홈으로</button>
 </section>
 
-<footer class="footer">둘의 마음을 맞춰 가는 작은 게임 💗<br>MADE WITH LOVE</footer>
+<div id="inviteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
+  <div class="modal-card">
+    <img class="modal-mark" src="./icon-192.png" alt="">
+    <div id="inviteTitle" class="modal-title"></div>
+    <p id="inviteText" class="muted"></p>
+    <div id="inviteSpinner" class="spinner hidden"></div>
+    <div id="inviteActions" class="modal-actions"></div>
+  </div>
+</div>
+
+<footer class="footer">Made with love for 다은</footer>
 </main>
 
 <script>
@@ -210,7 +311,7 @@ const ACCOUNT_LIST_KEY = "couple_accounts_v2";
 const LEGACY_AUTH_KEY = "sb-dcdattftbhwbpxzndeks-auth-token";
 
 const $ = id => document.getElementById(id);
-const screens = ["accountScreen","profileScreen","roomScreen","lobbyScreen","gameScreen","waitingScreen","resultScreen"];
+const screens = ["accountScreen","profileScreen","roomScreen","homeScreen","lobbyScreen","gameScreen","waitingScreen","resultScreen"];
 
 let accounts = [];
 let activeAccountId = null;
@@ -227,6 +328,12 @@ let busy = false;
 let activeScreenId = null;
 let lastSessionId = null;
 let lastResultSoundKey = null;
+let lobbyChannel = null;
+let onlineUsers = [];
+let outgoingInvite = null;
+let incomingInvite = null;
+let inviteTimer = null;
+let lastPresenceStatus = null;
 
 /* ===== 효과음 (파일 없이 브라우저에서 직접 만드는 소리) ===== */
 const SOUND_KEY="couple_sound_on";
@@ -311,6 +418,8 @@ function showScreen(id){
   $(id).classList.remove("hidden");
 
   activeScreenId = id;
+  $("app").classList.toggle("in-game",!["accountScreen","profileScreen"].includes(id));
+  updatePresence();
 
   if(screenChanged){
     window.scrollTo({top:0,behavior:"auto"});
@@ -428,30 +537,41 @@ function friendlyError(error){
   return m;
 }
 
+function formatLastUsed(iso){
+  if(!iso)return "이 기기에 저장됨";
+  const d=new Date(iso);
+  if(Number.isNaN(d.getTime()))return "이 기기에 저장됨";
+  return "최근 접속 "+(d.getMonth()+1)+"월 "+d.getDate()+"일";
+}
+
 function renderAccounts(){
   const list=$("accountList");
   if(!accounts.length){
-    list.innerHTML='<div class="muted" style="padding:12px 2px">저장된 계정이 아직 없어. 새로운 사용자를 추가해 줘.</div>';
+    list.innerHTML='<div class="empty-state">아직 저장된 계정이 없어.<br>아래 버튼으로 새 계정을 만들어 줘.</div>';
     return;
   }
 
-  list.innerHTML=accounts.map(a=>`
-    <div class="account-row">
-      <div class="avatar">${a.avatar||"🐰"}</div>
+  list.innerHTML=accounts.map((a,i)=>{
+    const name=a.nickname||"이름 없음";
+    const initial=escapeHtml(Array.from(name)[0]||"?");
+    return `
+    <div class="account-row${a.id===activeAccountId?" current":""}">
+      <div class="account-initial${i%2?" alt":""}">${initial}</div>
       <div class="account-meta">
-        <div class="account-name">${escapeHtml(a.nickname||"이름 없음")}</div>
-        <div class="account-sub">${a.id===activeAccountId?"현재 선택된 계정":"이 기기에 저장된 계정"}</div>
+        <div class="account-name">${escapeHtml(name)}</div>
+        <div class="account-sub">${formatLastUsed(a.lastUsedAt)}</div>
       </div>
       <div class="account-actions">
-        <button class="mini" type="button" onclick="window.__couple.selectAccount('${a.id}')">접속</button>
-        <button class="mini" type="button" onclick="window.__couple.removeAccount('${a.id}')">삭제</button>
+        <button class="row-btn subtle" type="button" onclick="window.__couple.removeAccount('${a.id}')">삭제</button>
+        <button class="row-btn" type="button" onclick="window.__couple.selectAccount('${a.id}')">시작</button>
       </div>
-    </div>
-  `).join("");
+    </div>`;
+  }).join("");
 }
 
 function showAccounts(){
   stopPolling();
+  leaveLobby();
   selectedAnswer=null;
   state=null;
   roomId=null;
@@ -590,18 +710,9 @@ async function activateAccount(id,existingClient=null){
 
   loadRoomForAccount();
   $("accountChip").textContent=currentNickname;
-  $("switchBtn").classList.remove("hidden");
 
-  if(roomId){
-    try{
-      await refreshState();
-    }catch(e){
-      notice("저장된 방을 불러오지 못했어: "+friendlyError(e),"error");
-      showScreen("roomScreen");
-    }
-  }else{
-    showScreen("roomScreen");
-  }
+  joinLobby();
+  goHome();
 }
 
 async function selectAccount(id){
@@ -1030,6 +1141,304 @@ async function approveMatch(){
   }
 }
 
+/* ===== 실시간 접속자 + 초대장 ===== */
+const GAME_SCREENS=["lobbyScreen","gameScreen","waitingScreen","resultScreen"];
+
+function myPresenceStatus(){
+  return GAME_SCREENS.includes(activeScreenId)?"playing":"online";
+}
+
+function updatePresence(){
+  if(!lobbyChannel||!currentUser)return;
+  const status=myPresenceStatus();
+  if(status===lastPresenceStatus)return;
+  lastPresenceStatus=status;
+  lobbyChannel.track({
+    user_id:currentUser.id,
+    nickname:currentNickname,
+    status,
+    online_at:new Date().toISOString()
+  }).catch(()=>{});
+}
+
+function joinLobby(){
+  leaveLobby();
+  if(!db||!currentUser)return;
+
+  lobbyChannel=db.channel("couple-online-lobby",{
+    config:{presence:{key:currentUser.id},broadcast:{self:false}}
+  });
+
+  lobbyChannel
+    .on("presence",{event:"sync"},renderOnline)
+    .on("broadcast",{event:"invite"},({payload})=>{
+      if(payload?.to===currentUser?.id)onInvite(payload);
+    })
+    .on("broadcast",{event:"invite_response"},({payload})=>{
+      if(payload?.to===currentUser?.id)onInviteResponse(payload);
+    })
+    .on("broadcast",{event:"invite_cancel"},({payload})=>{
+      if(payload?.to===currentUser?.id)onInviteCancel(payload);
+    })
+    .subscribe(status=>{
+      if(status==="SUBSCRIBED"){
+        lastPresenceStatus=null;
+        updatePresence();
+      }
+    });
+}
+
+function leaveLobby(){
+  clearTimeout(inviteTimer);
+  outgoingInvite=null;
+  incomingInvite=null;
+  hideModal();
+  if(lobbyChannel&&db){
+    try{db.removeChannel(lobbyChannel);}catch{}
+  }
+  lobbyChannel=null;
+  onlineUsers=[];
+  lastPresenceStatus=null;
+}
+
+function renderOnline(){
+  if(!lobbyChannel||!currentUser)return;
+
+  const seen=new Map();
+  Object.values(lobbyChannel.presenceState()).flat().forEach(p=>{
+    if(!p?.user_id||p.user_id===currentUser.id)return;
+    const prev=seen.get(p.user_id);
+    if(!prev||String(p.online_at)>String(prev.online_at))seen.set(p.user_id,p);
+  });
+  onlineUsers=[...seen.values()].sort((a,b)=>String(a.nickname).localeCompare(String(b.nickname),"ko"));
+
+  $("onlineCount").textContent=onlineUsers.length
+    ?`지금 접속 중 ${onlineUsers.length}명`
+    :"지금 접속한 사람이 없어";
+
+  if(!onlineUsers.length){
+    $("onlineList").innerHTML='<div class="empty-state">상대방에게 앱을 열어 달라고 해 봐 💌<br>들어오면 여기에 바로 나타나.</div>';
+    return;
+  }
+
+  $("onlineList").innerHTML=onlineUsers.map((u,i)=>{
+    const name=u.nickname||"익명";
+    const playing=u.status==="playing";
+    const waiting=outgoingInvite?.to===u.user_id;
+    return `
+    <div class="account-row">
+      <div class="account-initial${i%2?" alt":""}">${escapeHtml(Array.from(name)[0]||"?")}</div>
+      <div class="account-meta">
+        <div class="account-name">${escapeHtml(name)}</div>
+        <div class="account-sub"><span class="presence${playing?" busy":""}">${playing?"게임 중":"온라인"}</span></div>
+      </div>
+      <div class="account-actions">
+        <button class="row-btn" type="button" data-invite="${escapeHtml(u.user_id)}" ${playing||outgoingInvite?"disabled":""}>${waiting?"대기 중":"초대"}</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  $("onlineList").querySelectorAll("[data-invite]").forEach(btn=>{
+    btn.addEventListener("click",()=>inviteUser(btn.dataset.invite));
+  });
+}
+
+function showModal({title,text,actions=[],waiting=false}){
+  $("inviteTitle").textContent=title;
+  $("inviteText").textContent=text||"";
+  $("inviteSpinner").classList.toggle("hidden",!waiting);
+  const box=$("inviteActions");
+  box.innerHTML="";
+  box.className="modal-actions"+(actions.length===1?" single":"");
+  actions.forEach(a=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="btn"+(a.ghost?" ghost":"");
+    b.textContent=a.label;
+    b.addEventListener("click",a.onClick);
+    box.appendChild(b);
+  });
+  $("inviteModal").classList.remove("hidden");
+}
+
+function hideModal(){
+  $("inviteModal").classList.add("hidden");
+}
+
+function parseResult(data){
+  return typeof data==="string"?JSON.parse(data):data;
+}
+
+async function inviteUser(userId){
+  if(busy||outgoingInvite||!lobbyChannel)return;
+  const target=onlineUsers.find(u=>u.user_id===userId);
+  if(!target)return;
+
+  clearNotice();
+  setBusy(true);
+  try{
+    const {data,error}=await db.rpc("send_couple_invite",{p_to:userId});
+    if(error)throw error;
+    const r=parseResult(data);
+
+    outgoingInvite={id:r.invite_id,to:userId,toName:target.nickname||"상대방"};
+    await lobbyChannel.send({
+      type:"broadcast",
+      event:"invite",
+      payload:{to:userId,from:currentUser.id,fromName:currentNickname,inviteId:r.invite_id}
+    });
+
+    playSfx("submit");
+    showModal({
+      title:`${outgoingInvite.toName}에게 초대장을 보냈어`,
+      text:"상대방이 수락하면 바로 게임이 시작돼.",
+      waiting:true,
+      actions:[{label:"초대 취소",ghost:true,onClick:()=>cancelInvite(false)}]
+    });
+
+    clearTimeout(inviteTimer);
+    inviteTimer=setTimeout(()=>{if(outgoingInvite)cancelInvite(true);},60000);
+    renderOnline();
+  }catch(e){
+    outgoingInvite=null;
+    notice(friendlyError(e),"error");
+  }finally{
+    setBusy(false);
+  }
+}
+
+async function cancelInvite(timedOut){
+  const inv=outgoingInvite;
+  if(!inv)return;
+  outgoingInvite=null;
+  clearTimeout(inviteTimer);
+  hideModal();
+  renderOnline();
+
+  try{
+    await db.rpc("cancel_couple_invite",{p_invite_id:inv.id});
+    await lobbyChannel?.send({type:"broadcast",event:"invite_cancel",payload:{to:inv.to,inviteId:inv.id}});
+  }catch{}
+
+  if(timedOut)notice(`${inv.toName}의 응답이 없어서 초대를 취소했어.`,"info");
+}
+
+function onInvite(p){
+  if(GAME_SCREENS.includes(activeScreenId)||incomingInvite||outgoingInvite)return;
+  incomingInvite=p;
+  playSfx("approve");
+  if(navigator.vibrate)navigator.vibrate([80,60,80]);
+  showModal({
+    title:`${p.fromName||"누군가"}에게서 초대장이 왔어 💌`,
+    text:"지금 같이 게임할래?",
+    actions:[
+      {label:"다음에",ghost:true,onClick:()=>respondInvite(false)},
+      {label:"수락하기",onClick:()=>respondInvite(true)}
+    ]
+  });
+}
+
+function onInviteCancel(p){
+  if(!incomingInvite||incomingInvite.inviteId!==p.inviteId)return;
+  incomingInvite=null;
+  hideModal();
+  notice("상대방이 초대를 취소했어.","info");
+}
+
+async function enterRoom(coupleId,code){
+  roomId=String(coupleId);
+  roomCode=code||roomCode;
+  saveRoom();
+  const {error}=await db.rpc("start_couple_game",{p_couple_id:Number(roomId)});
+  if(error)throw error;
+  selectedAnswer=null;
+  await refreshState();
+}
+
+async function respondInvite(accept){
+  const inv=incomingInvite;
+  if(!inv||busy)return;
+  incomingInvite=null;
+  hideModal();
+  setBusy(true);
+
+  try{
+    const {data,error}=await db.rpc("respond_couple_invite",{p_invite_id:inv.inviteId,p_accept:accept});
+    if(error)throw error;
+    const r=parseResult(data);
+
+    if(r.accepted){
+      roomId=String(r.couple_id);
+      roomCode=r.invite_code||roomCode;
+      saveRoom();
+      const {error:startError}=await db.rpc("start_couple_game",{p_couple_id:Number(roomId)});
+      if(startError)throw startError;
+    }
+
+    await lobbyChannel?.send({
+      type:"broadcast",
+      event:"invite_response",
+      payload:{to:inv.from,inviteId:inv.inviteId,accepted:!!r.accepted,couple_id:r.couple_id,invite_code:r.invite_code,fromName:currentNickname}
+    });
+
+    if(r.accepted){
+      selectedAnswer=null;
+      await refreshState();
+    }
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }finally{
+    setBusy(false);
+  }
+}
+
+async function onInviteResponse(p){
+  if(!outgoingInvite||outgoingInvite.id!==p.inviteId)return;
+  const name=outgoingInvite.toName;
+  outgoingInvite=null;
+  clearTimeout(inviteTimer);
+  hideModal();
+
+  if(!p.accepted){
+    playSfx("mismatch");
+    notice(`${name}은(는) 지금은 어렵대. 조금 있다가 다시 초대해 봐!`,"info");
+    renderOnline();
+    return;
+  }
+
+  notice(`${name}이(가) 초대를 수락했어! 💗`,"success");
+  try{
+    await enterRoom(p.couple_id,p.invite_code);
+  }catch(e){
+    notice(friendlyError(e),"error");
+  }
+}
+
+function goHome(){
+  stopPolling();
+  state=null;
+  selectedAnswer=null;
+  $("homeGreeting").textContent=`안녕, ${currentNickname||"반가워"} 👋`;
+  $("resumeBtn").classList.toggle("hidden",!roomId);
+  showScreen("homeScreen");
+  renderOnline();
+}
+
+async function resumeGame(){
+  if(!roomId)return;
+  clearNotice();
+  try{
+    await refreshState();
+  }catch(e){
+    notice("저장된 방을 불러오지 못했어: "+friendlyError(e),"error");
+  }
+}
+
+function showRoomScreen(){
+  clearNotice();
+  showScreen("roomScreen");
+}
+
 function backToLobby(){
   if(state)renderLobby(state);
   else showScreen("roomScreen");
@@ -1052,7 +1461,20 @@ async function initialize(){
 
   accounts=readAccounts();
   renderAccounts();
-  showScreen("accountScreen");
+
+  if(!accounts.length){
+    showNewAccount();
+    return;
+  }
+
+  // 마지막으로 쓴 계정으로 자동 시작
+  const recent=[...accounts].sort((a,b)=>String(b.lastUsedAt||"").localeCompare(String(a.lastUsedAt||"")))[0];
+  try{
+    await activateAccount(recent.id);
+  }catch(e){
+    showScreen("accountScreen");
+    notice(friendlyError(e),"error");
+  }
 }
 
 window.__couple={selectAccount,removeAccount,chooseAnswer};
@@ -1069,6 +1491,9 @@ window.submitAnswer=submitAnswer;
 window.backToLobby=backToLobby;
 window.approveMatch=approveMatch;
 window.toggleSound=toggleSound;
+window.goHome=goHome;
+window.resumeGame=resumeGame;
+window.showRoomScreen=showRoomScreen;
 updateSoundButton();
 
 $("textAnswer").addEventListener("input",updateSubmitButton);

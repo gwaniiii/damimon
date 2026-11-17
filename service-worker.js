@@ -1,5 +1,5 @@
 // 코드를 수정해서 다시 올릴 때마다 v1 → v2 → v3 처럼 숫자를 올려주세요.
-const CACHE_NAME = "couple-cache-v4";
+const CACHE_NAME = "couple-cache-v6";
 
 const FILES = [
   "./",
